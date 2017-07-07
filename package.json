@@ -1,0 +1,27 @@
+{
+  "name": "server-consolidation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ava -v",
+    "test:watch": "ava -v --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ava": "^0.20.0",
+    "codeceptjs": "^0.6.3",
+    "error-stack-parser": "^2.0.1",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.1",
+    "superstack": "0.0.4",
+    "webdriverio": "^4.8.0"
+  },
+  "ava": {
+    "failWithoutAssertions": false
+  },
+  "devDependencies": {
+    "wdio-screenshot": "^0.6.0"
+  }
+}
