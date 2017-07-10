@@ -23,12 +23,20 @@ function getSource() {
     return browser.getSource()   
 }
 
+function saveScreen(fullPath) {
+    const browser = this.browser
+
+    return browser.saveViewportScreenshot(fullPath)
+}
+
+
 const addExtensions = (actor) =>
     Object.assign(actor, {
         grabElementsFrom,
         saveScreenshotFullscreen,
         saveElementScreenshot,
-        getSource
+        getSource,
+        saveScreen
     })
 
 module.exports = {

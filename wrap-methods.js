@@ -12,8 +12,11 @@ const methodsOfObject = function (obj, className) {
     'isPrototypeOf',
     'propertyIsEnumerable'
   ];
+  // Exclude additional methods  from being wrapped
   const excludes = [
-      'saveScreenshot'
+    'saveScreenshot',
+    'defineTimeout',
+    'debug'
   ]
 
   while (obj.constructor.name !== className) {
@@ -47,12 +50,11 @@ function wrapFn (obj, fn) {
             }
             const ret = await fn2(...args)
 
-            if (fn.name !== 'saveScreenshot') {
+            // Save screenshot after each command
+            if (process.env.DEBUG && fn.name !== 'saveScreenshot') {
                 try {
-
-                    console.log(fn.name)
-                    // await obj.saveScreenshot('test.png')
-                    // await saveScreenshot(obj, 1, fn.name, args, '_step_')
+                    // console.log('AFTER', fn.name)
+                    await saveScreenshot(obj, Date.now() / 1000, fn.name, args, '', '__steps__')
                 } catch (err) {
                     console.log(err)
                 }

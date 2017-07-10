@@ -15,14 +15,18 @@ module.exports = {
         mkdirp(global.output_dir)
     },
 
-    async saveScreenshot(actor, lineNumber, stepName, stepArgs, suffix) {
+    async saveScreenshot(actor, lineNumber, stepName, stepArgs = [], suffix = '', subdir = undefined) {
+        let outputDir = global.output_dir
+        if (subdir) {
+            outputDir = path.join(outputDir, subdir)
+            mkdirp(output_dir)
+        }
         const baseFileName = makeFileName(`${lineNumber} - I.${stepName}(${stepArgs.join(',') || ''})${suffix}`)
 
-        await actor.saveScreenshot(baseFileName + '.png', true)
+        await actor.saveScreen(path.join(outputDir, baseFileName) + '.png', true)
         
         const html = await actor.getSource()
-        fs.writeFileSync(path.join(global.output_dir, baseFileName + '.html'), html)
-        console.log(html)
+        fs.writeFileSync(path.join(outputDir, baseFileName + '.html'), html)
 
         return baseFileName + '.png'
     }
