@@ -29,6 +29,9 @@ function saveScreen(fullPath) {
     return browser.saveViewportScreenshot(fullPath)
 }
 
+function say(txt) {
+    return Promise.resolve(txt)
+}
 
 const addExtensions = (actor) =>
     Object.assign(actor, {
@@ -36,7 +39,8 @@ const addExtensions = (actor) =>
         saveScreenshotFullscreen,
         saveElementScreenshot,
         getSource,
-        saveScreen
+        saveScreen,
+        say
     })
 
 module.exports = {

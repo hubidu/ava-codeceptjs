@@ -1,11 +1,11 @@
 const { test } = require('ava')
 const wdioScreenshot = require('wdio-screenshot')
+const { AssertionError } = require('ava/lib/assert')
+const ErrorStackParser = require('error-stack-parser')
 
 const { wrap } = require('./wrap-methods')
 const driverCreate = require('./driver')
-const { addExtensions } = require('./add-extensions')
 const { createScreenshotDir, saveScreenshot } = require('./screenshot-utils')
-
 
 const on = async (pageObj, handlerFn) => {
     await handlerFn(wrap(pageObj))
@@ -13,9 +13,7 @@ const on = async (pageObj, handlerFn) => {
 
 test.beforeEach(async t => {
     try {
-        const I = addExtensions(driverCreate())
-
-        createScreenshotDir(t.title)
+        const I = wrap(driverCreate())
 
         await I._beforeSuite()
         await I._before()
@@ -23,6 +21,7 @@ test.beforeEach(async t => {
         // Add plugins
         wdioScreenshot.init(I.browser, {})
 
+        // Attach additional objects to test context
         t.context.I = I
         t.context.on = on
     } catch (err) {
@@ -38,9 +37,6 @@ test.afterEach.always(async t => {
     await I._afterSuite()
 })
 
-const { AssertionError } = require('ava/lib/assert')
-const ErrorStackParser = require('error-stack-parser')
-
 const parseErrorStack = (err) => {
     try {
         return ErrorStackParser.parse(err)[0]
@@ -51,14 +47,21 @@ const parseErrorStack = (err) => {
 }
 
 function createCatchErrors(testFn) {
-    return async function catchErrors (t) {
+    return async function (t) { // Leave it anonymous otherwise ava will use the function name
         try {
+            // Wrap actor methods
+            // t.context.I = wrap(t.context._I)
+            // Each test needs its own dedicated output directory
+            t.context.outputDir = t.context.I.outputDir = createScreenshotDir(t)
+
             // console.log(`${t.title} Running ...`)
             const ret = await testFn(t)
             // console.log(`${t.title} Finished with result = `, ret)
         } catch (err) {      
             const values = []
- 
+            
+            // console.log('createCatchErrors', err)
+
             // Correct the stack trace
             // TODO: There might be ava assertions
             // TODO: There might be webdriverio errors which stack can not be parsed
@@ -66,8 +69,8 @@ function createCatchErrors(testFn) {
             err.stack = err.stack.split('\n').slice(2).join('\n')
             const testStackframe = parseErrorStack(err)
 
-            t._test.addFailedAssertion(new AssertionError({
-                assertion: true,
+            const avaAssertion = new AssertionError({
+                assertion: 'is',
                 type: 'exception',
                 message: err.message,
                 // source: source(__filename, 59),
@@ -75,7 +78,9 @@ function createCatchErrors(testFn) {
                 // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
                 stack: err.orgStack,
                 values
-            }));
+            })
+            console.log(avaAssertion)
+            t._test.addFailedAssertion(avaAssertion)
 
             // Save error screenshot
             if (!err._failedStep) {
@@ -95,9 +100,14 @@ function createCatchErrors(testFn) {
     }
 } 
 
+/**
+ * Wrap all ava test methods
+ */
 const myTest = (name, handlerFn) => test(name, createCatchErrors(handlerFn))
 myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
-
+myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))
+myTest.afterEach = (handlerFn) => test.afterEach(createCatchErrors(handlerFn))
+myTest.afterEach.always = (handlerFn) => test.afterEach.always(createCatchErrors(handlerFn))
 
 module.exports = {
     test: myTest,

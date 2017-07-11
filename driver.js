@@ -1,11 +1,12 @@
 const webdriverio = require('webdriverio');
 const WebDriverIO = require('codeceptjs/lib/helper/WebDriverIO')
 const { wrap } = require('./wrap-methods')
+const { addExtensions } = require('./add-extensions')
 
 module.exports = () => {
     const wdioInstance = new WebDriverIO({
-                url: 'sdfdfs',
-                browser: 'chrome',
+                url: 'not important but non empty',  // Not important set in test
+                browser: 'chrome', // TODO Should be configurable
                 chromeOptions: {
                             // run in headless mode
                             args: ['--headless'],
@@ -14,5 +15,5 @@ module.exports = () => {
                         }                
     }, WebDriverIO)
 
-    return wrap(wdioInstance)
+    return addExtensions(wdioInstance)
 }

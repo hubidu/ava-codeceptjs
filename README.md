@@ -10,6 +10,7 @@ codeceptjs-ava
 - DONE Save debug screenshots automatically after each step
 
 - DOES NOT WORK: Make full page screenshots
+- test name should be part of the output directory
 - Extend Auto-Wait to all methods which are using selectors
 - Save screenshot when ava assertion fails
 - Try chrome headless

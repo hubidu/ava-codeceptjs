@@ -16,7 +16,8 @@ const methodsOfObject = function (obj, className) {
   const excludes = [
     'saveScreenshot',
     'defineTimeout',
-    'debug'
+    'debug',
+    'debugSection'
   ]
 
   while (obj.constructor.name !== className) {
@@ -35,23 +36,42 @@ const methodsOfObject = function (obj, className) {
 };
 
 const isSelector = txt => txt && (txt.indexOf('#') >= 0 || txt.indexOf('.') >= 0 || txt.indexOf('>') >= 0)
+const grabSelectorFromArgs = (fnName, args) => {
+    switch (args.length) {
+        case 1: return args[0]
+        case 2: return fnName.indexOf('fill') === 0 ? args[0] : args[1]
+        case 3: return args[2]
+    }
+}
 
 function wrapFn (obj, fn) {
     return async function wrapped(...args) {
-        // this.name = fn.name
-        // console.log(`${opts.indent || ''}I.${fn.name} ${(args && args.join(' ')) || ''}`)
         const fn2 = fn.bind(obj)
 
         const stackOfMethod = new Error()
         try {
             // console.log(`I.${fn.name} - calling...`)
-            if (['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom'].indexOf(fn.name) > -1 && isSelector(args[0])) {
-                await obj.waitForVisible(args[0], 5)
+
+            /**
+             * Automatically wait for elements to become visible
+             */
+            if (
+                ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom'].indexOf(fn.name) > -1 && 
+                isSelector(grabSelectorFromArgs(fn.name, args))
+            ) {
+                await obj.waitForVisible(grabSelectorFromArgs(fn.name, args), 5)
             }
+
+            // Execute the step
             const ret = await fn2(...args)
 
-            // Save screenshot after each command
-            if (process.env.DEBUG && fn.name !== 'saveScreenshot') {
+            /**
+             * Save screenshots after step execution
+             */
+            if (
+                (process.env.DEBUG && fn.name !== 'saveScreenshot') || 
+                (fn.name === 'say' || fn.name.indexOf('see') === 0)
+            ) {
                 try {
                     // console.log('AFTER', fn.name)
                     await saveScreenshot(obj, Date.now() / 1000, fn.name, args, '', '__steps__')
@@ -82,7 +102,7 @@ function wrapFn (obj, fn) {
 }
 
 const wrap = (obj, Clazz) => {
-    const methods = methodsOfObject(obj, Clazz)
+    const methods = methodsOfObject(obj)
     methods.forEach(method => {
         obj[method] = wrapFn(obj, obj[method])
     })
