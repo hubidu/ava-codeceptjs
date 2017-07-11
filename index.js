@@ -70,16 +70,19 @@ function createCatchErrors(testFn) {
             const testStackframe = parseErrorStack(err)
 
             const avaAssertion = new AssertionError({
+                name: 'AssertionError',
                 assertion: 'is',
-                type: 'exception',
+                improperUsage: false,
+                // type: 'exception',
                 message: err.message,
+                actual: err.actual,
+                expected: err.expected,
                 // source: source(__filename, 59),
                 fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
                 // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
-                stack: err.orgStack,
+                stack: err.stack,
                 values
             })
-            console.log(avaAssertion)
             t._test.addFailedAssertion(avaAssertion)
 
             // Save error screenshot

@@ -76,7 +76,7 @@ function wrapFn (obj, fn) {
                     // console.log('AFTER', fn.name)
                     await saveScreenshot(obj, Date.now() / 1000, fn.name, args, '', '__steps__')
                 } catch (err) {
-                    console.log(err)
+                    console.log('ERROR saving screenshot', err)
                 }
             }
             // console.log(`I.${fn.name}: - result`, ret)
@@ -87,15 +87,16 @@ function wrapFn (obj, fn) {
                 return
             }
 
-            const newError = new Error(err.message)
+            const newError = new Error(err.message || err.cliMessage())
             newError.stack = stackOfMethod.stack
             newError.orgStack = err.stack
+            newError.actual = err.actual
+            newError.expected = err.expected
             // Attach failed step data
             newError._failedStep = {
                 name: fn.name,
                 args
             }
-
             return Promise.reject(newError)
         }
     }
