@@ -1,13 +1,13 @@
 {
-  "name": "server-consolidation",
+  "name": "ava-codeceptjs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Concurrent UI testing",
   "main": "index.js",
   "scripts": {
     "test": "ava -v",
     "test:watch": "ava -v --watch"
   },
-  "author": "",
+  "author": "Stefan Huber",
   "license": "ISC",
   "dependencies": {
     "ava": "^0.20.0",
@@ -16,12 +16,10 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.1",
     "superstack": "0.0.4",
-    "webdriverio": "^4.8.0"
+    "webdriverio": "^4.8.0",
+    "wdio-screenshot": "^0.6.0"
   },
   "ava": {
     "failWithoutAssertions": false
-  },
-  "devDependencies": {
-    "wdio-screenshot": "^0.6.0"
   }
 }

@@ -1,0 +1,19 @@
+{
+  "name": "ava-codeceptjs-example",
+  "version": "1.0.0",
+  "description": "Example test project for ava-codeceptjs",
+  "main": "",
+  "scripts": {
+    "test": "ava -v",
+    "test:watch": "ava -v --watch"
+  },
+  "author": "Stefan Huber",
+  "license": "ISC",
+  "dependencies": {
+    "ava": "^0.20.0",
+    "ava-codeceptjs": "^1.0.0"
+  },
+  "ava": {
+    "failWithoutAssertions": false
+  }
+}

@@ -1,4 +1,4 @@
-const { test, scenario } = require('./codecept-ava')
+const { test, scenario } = require('ava-codeceptjs')
 
 const Check24RechtsschutzPage = require('./check24-rechtsschutz.page')
 const Check24KfzPageModel = require('./check24-kfz.page-model')
