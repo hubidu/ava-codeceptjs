@@ -15,6 +15,7 @@ const methodsOfObject = function (obj, className) {
   // Exclude additional methods  from being wrapped
   const excludes = [
     'saveScreenshot',
+    'highlightElement',
     'defineTimeout',
     'debug',
     'debugSection'
@@ -74,6 +75,10 @@ function wrapFn (obj, fn) {
             ) {
                 try {
                     // console.log('AFTER', fn.name)
+                    if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {
+                        await obj.highlightElement(grabSelectorFromArgs(fn.name, args))
+                    }
+
                     await saveScreenshot(obj, Date.now() / 1000, fn.name, args, '', '__steps__')
                 } catch (err) {
                     console.log('ERROR saving screenshot', err)

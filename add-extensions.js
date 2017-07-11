@@ -29,8 +29,26 @@ function saveScreen(fullPath) {
     return browser.saveViewportScreenshot(fullPath)
 }
 
+/**
+ * Say does nothing, but there are some actions
+ */
 function say(txt) {
     return Promise.resolve(txt)
+}
+
+/**
+ * Quick and dirty try to highlight elements on a page
+ */
+function highlightElement(sel) {
+    const browser = this.browser
+
+    return browser.execute(function(sel) {
+        var xx = document.querySelectorAll(sel);
+        for (var i = 0; i < xx.length; i++) {
+                xx[i].style.border = "2px solid red";
+                xx[i].style['background-color'] = "yellow";
+        }
+    }, sel)
 }
 
 const addExtensions = (actor) =>
@@ -40,7 +58,8 @@ const addExtensions = (actor) =>
         saveElementScreenshot,
         getSource,
         saveScreen,
-        say
+        say,
+        highlightElement
     })
 
 module.exports = {

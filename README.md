@@ -9,8 +9,9 @@ codeceptjs-ava
 - DONE Save error screenshot to output directory
 - DONE Save debug screenshots automatically after each step
 - DONE cleanup error screenshots before each test run
+- DONE Code excerpt broken on codeceptjs exceptions
 
-- Code excerpt broken on codeceptjs exceptions
+- Still problems creating screenshot directories
 - DOES NOT WORK: Make full page screenshots
 - test name should be part of the output directory
 - Extend Auto-Wait to all methods which are using selectors

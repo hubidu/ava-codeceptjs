@@ -34,25 +34,27 @@ scenario('signin should fail showing error message', async t => {
   
   await I.click('Sign in');
   await I.see('Sign in to GitHub');
+
   await I.fillField('Username or email address', 'something@totest.com');
   await I.fillField('Password', '123456');
   await I.click('Sign in');
 
   await I.say('I should now see an error message')
 
-  // TODO Fix this - we have 2 parameters here
   await I.see('Incorrect username or password.', '.flash-error');
 });
 
-// scenario('register', async t => {
-//   within('.js-signup-form', function () {
-//     I.fillField('user[login]', 'User');
-//     I.fillField('user[email]', 'user@user.com');
-//     I.fillField('user[password]', 'user@user.com');
-//     I.fillField('q', 'aaa');
-//     I.click('button');
-//   });
-//   I.see('There were problems creating your account.');
-//   I.click('Explore');
-//   I.seeInCurrentUrl('/explore');
-// });
+scenario.only('register', async t => {
+  const { I, within } = t.context
+
+  await within('.js-signup-form', I, async () => {
+    await I.fillField('user[login]', 'User');
+    await I.fillField('user[email]', 'user@user.com');
+    await I.fillField('user[password]', 'user@user.com');
+    // await I.fillField('q', 'aaa');
+    await I.click('Sign up for GitHub');
+  });
+  await I.see('There were problems creating your account');
+  await I.click('Explore');
+  await I.seeInCurrentUrl('/explore');
+});

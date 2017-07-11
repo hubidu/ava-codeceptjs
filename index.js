@@ -11,6 +11,17 @@ const on = async (pageObj, handlerFn) => {
     await handlerFn(wrap(pageObj))
 }
 
+const within = async (sel, actor, handlerFn) => {
+    await actor._withinBegin(sel)
+    try {
+        await handlerFn()
+    } catch (err) {
+        await actor._withinEnd()
+        throw err    
+    }
+    await actor._withinEnd()
+}
+
 test.beforeEach(async t => {
     try {
         const I = wrap(driverCreate())
@@ -24,6 +35,7 @@ test.beforeEach(async t => {
         // Attach additional objects to test context
         t.context.I = I
         t.context.on = on
+        t.context.within = within
     } catch (err) {
         if (err.message.indexOf('ECONNREFUSED') >= 0) throw new Error('Could not connect to selenium server! Did you start it?')
         throw new Error(err)
