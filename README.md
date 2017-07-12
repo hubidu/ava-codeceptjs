@@ -11,6 +11,12 @@ codeceptjs-ava
 - DONE cleanup error screenshots before each test run
 - DONE Code excerpt broken on codeceptjs exceptions
 
+- In error screenshots: Show a grid of all boxes
+    * { 
+      border: 1px solid rgba(0, 0, 0, 0.3);
+    }
+- Try ava screenshot feature
+- Try ava failing test feature
 - Still problems creating screenshot directories
 - DOES NOT WORK: Make full page screenshots
 - test name should be part of the output directory

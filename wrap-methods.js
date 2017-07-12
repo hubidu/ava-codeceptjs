@@ -36,18 +36,27 @@ const methodsOfObject = function (obj, className) {
   return methods;
 };
 
-const isSelector = txt => txt && (txt.indexOf('#') >= 0 || txt.indexOf('.') >= 0 || txt.indexOf('>') >= 0)
+const isSelector = txt => txt && typeof txt === 'string' && (txt.indexOf('#') >= 0 || txt.indexOf('.') >= 0 || txt.indexOf('>') >= 0)
 const grabSelectorFromArgs = (fnName, args) => {
     switch (args.length) {
         case 1: return args[0]
-        case 2: return fnName.indexOf('fill') === 0 ? args[0] : args[1]
+        case 2: 
+            if(fnName.indexOf('fill') === 0) {
+                return args[0]
+            } else if (fnName === 'seeNumberOfElements') {
+                return args[0]
+            } else {
+                return args[1]
+            }
         case 3: return args[2]
     }
 }
 
-function wrapFn (obj, fn) {
+const actorFromActorOrPageObj = (actorOrPageObj) => actorOrPageObj.actor ? actorOrPageObj.actor : actorOrPageObj
+
+function wrapFn (actor, fn) {
     return async function wrapped(...args) {
-        const fn2 = fn.bind(obj)
+        const fn2 = fn.bind(actor)
 
         const stackOfMethod = new Error()
         try {
@@ -60,7 +69,7 @@ function wrapFn (obj, fn) {
                 ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom'].indexOf(fn.name) > -1 && 
                 isSelector(grabSelectorFromArgs(fn.name, args))
             ) {
-                await obj.waitForVisible(grabSelectorFromArgs(fn.name, args), 5)
+                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 5)
             }
 
             // Execute the step
@@ -76,10 +85,11 @@ function wrapFn (obj, fn) {
                 try {
                     // console.log('AFTER', fn.name)
                     if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {
-                        await obj.highlightElement(grabSelectorFromArgs(fn.name, args))
+                        await actor.displayBoxGrid()
+                        await actor.highlightElement(grabSelectorFromArgs(fn.name, args))
                     }
 
-                    await saveScreenshot(obj, Date.now() / 1000, fn.name, args, '', '__steps__')
+                    await saveScreenshot(actorFromActorOrPageObj(actor), Date.now() / 1000, fn.name, args, '', '__steps__')
                 } catch (err) {
                     console.log('ERROR saving screenshot', err)
                 }
@@ -107,12 +117,12 @@ function wrapFn (obj, fn) {
     }
 }
 
-const wrap = (obj, Clazz) => {
-    const methods = methodsOfObject(obj)
+const wrap = (actor, Clazz) => {
+    const methods = methodsOfObject(actor)
     methods.forEach(method => {
-        obj[method] = wrapFn(obj, obj[method])
+        actor[method] = wrapFn(actor, actor[method])
     })
-    return obj
+    return actor
 }
 
 module.exports = {

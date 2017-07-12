@@ -7,11 +7,14 @@ const makeFileName = (str) => {
     return str.replace(/[:\\\/\*\?><]/g, '')
 }
 
-module.exports = {
+ const screenshotDir = (t) =>`./out/${makeFileName(t.title.replace('beforeEach for ', ''))}`
+
+module.exports = {  
     createScreenshotDir(t) {
         // Set this for saving screenshots
-        const outputDir = `./out/${makeFileName(t.title.replace('beforeEach for ', ''))}`
-        rimraf.sync(outputDir)
+        const outputDir = screenshotDir(t)
+
+        rimraf.sync(`${outputDir}`)
         mkdirp(outputDir)
         return outputDir
     },

@@ -7,11 +7,25 @@ const { wrap } = require('./wrap-methods')
 const driverCreate = require('./driver')
 const { createScreenshotDir, saveScreenshot } = require('./screenshot-utils')
 
-const on = async (pageObj, handlerFn) => {
-    await handlerFn(wrap(pageObj))
+/**
+ * Do something in context of page object
+ */
+async function on (pageObjClazz, handlerFn) {
+    const wrappedPageObject = wrap(new pageObjClazz(this.context.I))
+
+    // Attach some context information
+    wrappedPageObject.outputDir = this.context.I.outputDir
+    wrappedPageObject.actor = this.context.I
+
+    await handlerFn(wrappedPageObject)
 }
 
-const within = async (sel, actor, handlerFn) => {
+/**
+ * Do something in context of an element on the page
+ */
+async function within (sel, handlerFn) {
+    const actor = this.context.I
+
     await actor._withinBegin(sel)
     try {
         await handlerFn()
@@ -34,12 +48,16 @@ test.beforeEach(async t => {
 
         // Attach additional objects to test context
         t.context.I = I
-        t.context.on = on
-        t.context.within = within
     } catch (err) {
         if (err.message.indexOf('ECONNREFUSED') >= 0) throw new Error('Could not connect to selenium server! Did you start it?')
         throw new Error(err)
     }
+})
+test.beforeEach(async t => {
+    const I = t.context.I
+    
+    // Setup test output directory
+    t.context.outputDir = t.context.I.outputDir = createScreenshotDir(t)
 })
 test.afterEach.always(async t => {
     const I = t.context.I
@@ -61,10 +79,13 @@ const parseErrorStack = (err) => {
 function createCatchErrors(testFn) {
     return async function (t) { // Leave it anonymous otherwise ava will use the function name
         try {
+            // Ad these methods to each execution context
+            t.on = on.bind(t)
+            t.within = within.bind(t)
+
             // Wrap actor methods
             // t.context.I = wrap(t.context._I)
             // Each test needs its own dedicated output directory
-            t.context.outputDir = t.context.I.outputDir = createScreenshotDir(t)
 
             // console.log(`${t.title} Running ...`)
             const ret = await testFn(t)

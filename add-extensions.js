@@ -24,9 +24,16 @@ function getSource() {
 }
 
 function saveScreen(fullPath) {
+    if (!fullPath) throw new Error('Expected to get a full screenshot path')
     const browser = this.browser
 
     return browser.saveViewportScreenshot(fullPath)
+}
+
+function saveScreenshot(fileName) {
+    const browser = this.browser
+
+    return browser.saveViewportScreenshot(path.join(this.outputDir, fileName))
 }
 
 /**
@@ -51,6 +58,25 @@ function highlightElement(sel) {
     }, sel)
 }
 
+function displayBoxGrid() {
+    const browser = this.browser
+
+    return browser.execute(function() {
+        var css = '* { border: 1px solid rgba(0, 0, 0, 0.3); }',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
+
+        style.type = 'text/css';
+        if (style.styleSheet){
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+
+        head.appendChild(style);
+    })
+}
+
 const addExtensions = (actor) =>
     Object.assign(actor, {
         grabElementsFrom,
@@ -58,8 +84,10 @@ const addExtensions = (actor) =>
         saveElementScreenshot,
         getSource,
         saveScreen,
+        saveScreenshot,
         say,
-        highlightElement
+        highlightElement,
+        displayBoxGrid
     })
 
 module.exports = {

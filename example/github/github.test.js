@@ -44,14 +44,15 @@ scenario('signin should fail showing error message', async t => {
   await I.see('Incorrect username or password.', '.flash-error');
 });
 
-scenario.only('register', async t => {
-  const { I, within } = t.context
+scenario('register', async t => {
+  const { I } = t.context
 
-  await within('.js-signup-form', I, async () => {
+  await t.within('.js-signup-form', async () => {
     await I.fillField('user[login]', 'User');
     await I.fillField('user[email]', 'user@user.com');
     await I.fillField('user[password]', 'user@user.com');
     // await I.fillField('q', 'aaa');
+    await I.see('Sign up for GitHub')
     await I.click('Sign up for GitHub');
   });
   await I.see('There were problems creating your account');
