@@ -1,8 +1,12 @@
-codeceptjs-ava
+ava-codeceptjs
 ==============
 
+Opinionated, concurrent UI Testing. Using ava, codeceptjs, webdriverio and chrome. 
 
-## TODO
+## Why
+
+
+## Backlog
 
 - DONE Auto-Wait for elements automatically on 'click'
 - DONE Create valid error screenshot file names
