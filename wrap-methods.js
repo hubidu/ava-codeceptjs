@@ -43,7 +43,7 @@ const grabSelectorFromArgs = (fnName, args) => {
         case 2: 
             if(fnName.indexOf('fill') === 0) {
                 return args[0]
-            } else if (fnName === 'seeNumberOfElements') {
+            } else if (fnName === 'seeNumberOfElements' || fnName === 'seeInField') {
                 return args[0]
             } else {
                 return args[1]
@@ -66,14 +66,16 @@ function wrapFn (actor, fn) {
              * Automatically wait for elements to become visible
              */
             if (
-                ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom'].indexOf(fn.name) > -1 && 
+                ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom', 'fillField'].indexOf(fn.name) > -1 && 
                 isSelector(grabSelectorFromArgs(fn.name, args))
             ) {
-                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 5)
+                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 10)
             }
 
             // Execute the step
             const ret = await fn2(...args)
+
+            const I = actorFromActorOrPageObj(actor)
 
             /**
              * Save screenshots after step execution
@@ -85,22 +87,23 @@ function wrapFn (actor, fn) {
                 try {
                     // console.log('AFTER', fn.name)
                     if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {
-                        await actor.displayBoxGrid()
-                        await actor.highlightElement(grabSelectorFromArgs(fn.name, args))
+                        await I.highlightElement(grabSelectorFromArgs(fn.name, args), `OK "I.${fn.name}(${args.join(',') || ''})"`)
                     }
 
-                    await saveScreenshot(actorFromActorOrPageObj(actor), Date.now() / 1000, fn.name, args, '', '__steps__')
+                    await I.displayBoxGrid()
+                    await saveScreenshot(I, Date.now() / 1000, fn.name, args, '', '__steps__')
                 } catch (err) {
-                    console.log('ERROR saving screenshot', err)
+                    console.log('ERROR Failed to save screenshot', err)
                 }
             }
             // console.log(`I.${fn.name}: - result`, ret)
             return ret
         } catch (err) {
             // Ignore errors happening on saveScreenshot
-            if (fn.name === 'saveScreenshot') {
-                return
-            }
+            // Save screenshot should not be wrapped
+            // if (fn.name === 'saveScreenshot') {
+            //     return
+            // }
 
             const newError = new Error(err.message || err.cliMessage())
             newError.stack = stackOfMethod.stack

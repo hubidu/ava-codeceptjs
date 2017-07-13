@@ -1,9 +1,19 @@
 ava-codeceptjs
 ==============
 
-Opinionated, concurrent UI Testing. Using ava, codeceptjs, webdriverio and chrome. 
+Concurrent UI Testing with opinionated stack. Using ava, codeceptjs, webdriverio and chrome. 
 
-## Why
+## Features
+
+- Tests are run concurrently speeding up total execution time
+- Use ava's watch mode to automatically run changed tests during development
+- Uses async/await. No promise chain magic under the hood.
+- Uses ava's great assertion library, code excerpts, before/after hooks etc.
+- Automatically wait for elements before clicking, filling input fields or validating assertions
+- Automatically make a screenshot when a test fails
+- Automatically take screenshots of assertions
+
+## Install
 
 
 ## Backlog
@@ -15,11 +25,12 @@ Opinionated, concurrent UI Testing. Using ava, codeceptjs, webdriverio and chrom
 - DONE cleanup error screenshots before each test run
 - DONE Code excerpt broken on codeceptjs exceptions
 
+- Improve element highlighting in screenshots
 - In error screenshots: Show a grid of all boxes
     * { 
       border: 1px solid rgba(0, 0, 0, 0.3);
     }
-- Try ava screenshot feature
+- Try ava snapshot feature
 - Try ava failing test feature
 - Still problems creating screenshot directories
 - DOES NOT WORK: Make full page screenshots
@@ -32,7 +43,8 @@ Opinionated, concurrent UI Testing. Using ava, codeceptjs, webdriverio and chrom
 - Suppport webdriverio errors
 - Convenience functions to login/cache login session (speed up login)
 - Store last successful screenshot and show on error compared with error screen
-- Show test duration
+- Record test duration
+- Transparent page objects for multiple devices
 - Would be nice if chrome would not steal the focus
 - Remove wrapped methods from call stack: WebDriverIO.wrapped [as seeNumberOfElements] (wrap-methods.js:34:31)
 - Would be cool to integrate something like quokka

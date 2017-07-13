@@ -27,13 +27,13 @@ function saveScreen(fullPath) {
     if (!fullPath) throw new Error('Expected to get a full screenshot path')
     const browser = this.browser
 
-    return browser.saveViewportScreenshot(fullPath)
+    return browser.saveScreenshot(fullPath)
 }
 
 function saveScreenshot(fileName) {
     const browser = this.browser
 
-    return browser.saveViewportScreenshot(path.join(this.outputDir, fileName))
+    return browser.saveScreenshot(path.join(this.outputDir, fileName))
 }
 
 /**
@@ -46,23 +46,34 @@ function say(txt) {
 /**
  * Quick and dirty try to highlight elements on a page
  */
-function highlightElement(sel) {
+function highlightElement(sel, text) {
     const browser = this.browser
 
-    return browser.execute(function(sel) {
+    return browser.execute(function (sel, text) {
+        // var $text = document.createElement('div');
+        // $text.style.position = 'absolute';
+        // // $text.style.top = '-1em';
+        // $text.style['z-index'] = 1000;
+        // $text.style['font-style'] = 'bold';
+        // $text.appendChild(document.createTextNode('SDFSDF SDF SDF SDFSD FSDA FSDF SDA FSD FASDA Fdfas'));
+        // document.body.appendChild($text);
+
         var xx = document.querySelectorAll(sel);
         for (var i = 0; i < xx.length; i++) {
-                xx[i].style.border = "2px solid red";
-                xx[i].style['background-color'] = "yellow";
+                xx[i].style.border = "2px dashed Teal";
+                xx[i].style['background-color'] = "LightGreen";
+
+                if (text) xx[i].appendChild(document.createTextNode(text));
         }
-    }, sel)
+
+    }, sel, text)
 }
 
 function displayBoxGrid() {
     const browser = this.browser
 
     return browser.execute(function() {
-        var css = '* { border: 1px solid rgba(0, 0, 0, 0.3); }',
+        var css = '* { border: 1px solid rgba(0, 0, 0, 0.2); }',
             head = document.head || document.getElementsByTagName('head')[0],
             style = document.createElement('style');
 
