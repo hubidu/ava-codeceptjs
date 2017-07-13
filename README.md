@@ -24,12 +24,12 @@ Concurrent UI Testing with opinionated stack. Using ava, codeceptjs, webdriverio
 - DONE Save debug screenshots automatically after each step
 - DONE cleanup error screenshots before each test run
 - DONE Code excerpt broken on codeceptjs exceptions
-
-- Improve element highlighting in screenshots
-- In error screenshots: Show a grid of all boxes
+- DONE In error screenshots: Show a grid of all boxes
     * { 
       border: 1px solid rgba(0, 0, 0, 0.3);
     }
+
+- Improve element highlighting in screenshots
 - Try ava snapshot feature
 - Try ava failing test feature
 - Still problems creating screenshot directories

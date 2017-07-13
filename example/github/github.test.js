@@ -27,6 +27,13 @@ scenario('search for codeceptjs', async t => {
 //     console.log(t._test.assertError)
 // })
 
+scenario.failing('signin should fail showing error message', async t => {
+  const { I } = t.context
+
+  await I.amOnPage('foo')
+})
+
+
 scenario('signin should fail showing error message', async t => {
   const { I } = t.context
     

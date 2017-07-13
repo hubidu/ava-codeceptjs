@@ -148,6 +148,7 @@ myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
 myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))
 myTest.afterEach = (handlerFn) => test.afterEach(createCatchErrors(handlerFn))
 myTest.afterEach.always = (handlerFn) => test.afterEach.always(createCatchErrors(handlerFn))
+myTest.failing = (name, handlerFn) => test.failing(name, createCatchErrors(handlerFn))
 
 module.exports = {
     test: myTest,
