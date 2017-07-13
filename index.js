@@ -106,6 +106,11 @@ function createCatchErrors(testFn) {
             err.stack = err.stack.split('\n').slice(2).join('\n')
             const testStackframe = parseErrorStack(err)
 
+            if (err.actual && err.expected) {
+                values.push({ label: 'actual', formatted: err.actual })
+                values.push({ label: 'expected', formatted: err.expected })
+            }
+
             const avaAssertion = new AssertionError({
                 name: 'AssertionError',
                 assertion: 'is',

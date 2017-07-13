@@ -53,12 +53,34 @@ const grabSelectorFromArgs = (fnName, args) => {
 }
 
 const actorFromActorOrPageObj = (actorOrPageObj) => actorOrPageObj.actor ? actorOrPageObj.actor : actorOrPageObj
+const makeScreenshot = async (I, fn, args, isError = false) => {
+    if (
+        (process.env.DEBUG && fn.name !== 'saveScreenshot') ||
+        (fn.name === 'say' || fn.name.indexOf('see') === 0 || fn.name.indexOf('dontSee') === 0)
+    ) {
+        try {
+            // console.log('AFTER', fn.name)
+            if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {
+                await I.highlightElement(grabSelectorFromArgs(fn.name, args), `${isError? 'ERROR' : 'OK' } "I.${fn.name}(${args.join(',') || ''})"`, isError)
+            }
+
+            await I.displayBoxGrid()
+            await saveScreenshot(I, Date.now() / 1000, fn.name, args, isError ? 'error' : '', isError ? '__steps__' : '')
+        } catch (err) {
+            console.log('ERROR Failed to save screenshot', err)
+        }
+    }
+
+}
+
 
 function wrapFn (actor, fn) {
     return async function wrapped(...args) {
         const fn2 = fn.bind(actor)
 
         const stackOfMethod = new Error()
+        const I = actorFromActorOrPageObj(actor)
+
         try {
             // console.log(`I.${fn.name} - calling...`)
 
@@ -69,33 +91,16 @@ function wrapFn (actor, fn) {
                 ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom', 'fillField'].indexOf(fn.name) > -1 && 
                 isSelector(grabSelectorFromArgs(fn.name, args))
             ) {
-                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 10)
+                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 20)
             }
 
             // Execute the step
             const ret = await fn2(...args)
 
-            const I = actorFromActorOrPageObj(actor)
-
             /**
              * Save screenshots after step execution
              */
-            if (
-                (process.env.DEBUG && fn.name !== 'saveScreenshot') || 
-                (fn.name === 'say' || fn.name.indexOf('see') === 0)
-            ) {
-                try {
-                    // console.log('AFTER', fn.name)
-                    if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {
-                        await I.highlightElement(grabSelectorFromArgs(fn.name, args), `OK "I.${fn.name}(${args.join(',') || ''})"`)
-                    }
-
-                    await I.displayBoxGrid()
-                    await saveScreenshot(I, Date.now() / 1000, fn.name, args, '', '__steps__')
-                } catch (err) {
-                    console.log('ERROR Failed to save screenshot', err)
-                }
-            }
+            await makeScreenshot(I, fn, args)
             // console.log(`I.${fn.name}: - result`, ret)
             return ret
         } catch (err) {
@@ -104,6 +109,7 @@ function wrapFn (actor, fn) {
             // if (fn.name === 'saveScreenshot') {
             //     return
             // }
+            await makeScreenshot(I, fn, args, true)
 
             const newError = new Error(err.message || err.cliMessage())
             newError.stack = stackOfMethod.stack

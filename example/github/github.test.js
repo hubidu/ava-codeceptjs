@@ -55,6 +55,7 @@ scenario('register', async t => {
   const { I } = t.context
 
   await t.within('.js-signup-form', async () => {
+    // TODO I think this fails sometimes because there is global state in WebDriverIOHelper
     await I.fillField('user[login]', 'User');
     await I.fillField('user[email]', 'user@user.com');
     await I.fillField('user[password]', 'user@user.com');

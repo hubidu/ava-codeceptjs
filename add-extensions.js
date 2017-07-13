@@ -46,10 +46,10 @@ function say(txt) {
 /**
  * Quick and dirty try to highlight elements on a page
  */
-function highlightElement(sel, text) {
+function highlightElement(sel, text, isError = false) {
     const browser = this.browser
 
-    return browser.execute(function (sel, text) {
+    return browser.execute(function (sel, text, isError) {
         // var $text = document.createElement('div');
         // $text.style.position = 'absolute';
         // // $text.style.top = '-1em';
@@ -57,16 +57,18 @@ function highlightElement(sel, text) {
         // $text.style['font-style'] = 'bold';
         // $text.appendChild(document.createTextNode('SDFSDF SDF SDF SDFSD FSDA FSDF SDA FSD FASDA Fdfas'));
         // document.body.appendChild($text);
+        var color1 = isError ? 'red' : 'Teal';
+        var color2 = isError ? 'orange' : 'LightGreen';
 
         var xx = document.querySelectorAll(sel);
         for (var i = 0; i < xx.length; i++) {
-                xx[i].style.border = "2px dashed Teal";
-                xx[i].style['background-color'] = "LightGreen";
+                xx[i].style.border = "2px dashed " + color1;
+                xx[i].style['background-color'] = "LightGreen " + color2;
 
                 if (text) xx[i].appendChild(document.createTextNode(text));
         }
 
-    }, sel, text)
+    }, sel, text, isError)
 }
 
 function displayBoxGrid() {

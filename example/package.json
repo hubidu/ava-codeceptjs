@@ -10,7 +10,7 @@
   "author": "Stefan Huber",
   "license": "ISC",
   "dependencies": {
-    "ava": "^0.20.0",
+    "ava": "^0.21.0",
     "ava-codeceptjs": "^1.0.0"
   },
   "ava": {
