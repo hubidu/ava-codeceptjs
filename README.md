@@ -3,6 +3,14 @@ ava-codeceptjs
 
 Concurrent UI Testing with opinionated stack. Using ava, codeceptjs, webdriverio and chrome. 
 
+## Why
+
+Because
+
+- Using gherkin syntax in your UI tests does not make sense. Business people won't read (or even edit) your tests anyway. Developer productivity when writing the tests is and having a maintainable code base is what counts
+- Running tests concurrently will speed up your feedback loop
+- CodeceptJS has a nice API, but otherwise too much magic or unnecessary features
+
 ## Features
 
 - Tests are run concurrently speeding up total execution time
