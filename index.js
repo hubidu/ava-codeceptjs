@@ -44,7 +44,7 @@ test.beforeEach(async t => {
         await I._before()
 
         // TODO That depends on device being tested. Should be configurable
-        await I.resizeWindow('maximize')
+        // await I.resizeWindow('maximize')
 
         await I.defineTimeout({ implicit: 10000, "page load": 10000, script: 5000 })
         // Add plugins

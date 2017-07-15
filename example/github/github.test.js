@@ -5,7 +5,6 @@ const Smth = require('./Smth.js')
 scenario.beforeEach(async t => {
   const { I } = t.context
 
-  await I.resizeWindow('maximize')
   await Smth(I).openGitHub();
 })
 
@@ -36,7 +35,7 @@ scenario.failing('signin should fail showing error message', async t => {
 
 scenario('signin should fail showing error message', async t => {
   const { I } = t.context
-    
+   
   await I.say('Signing in to github with non-existing account...');
   
   await I.click('Sign in');

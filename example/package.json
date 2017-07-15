@@ -4,8 +4,8 @@
   "description": "Example test project for ava-codeceptjs",
   "main": "",
   "scripts": {
-    "test": "ava -c 2 -v",
-    "test:watch": "ava -c 2 -v --watch"
+    "test": "ava --concurrency=2 -v",
+    "test:watch": "npm t -- --watch"
   },
   "author": "Stefan Huber",
   "license": "ISC",

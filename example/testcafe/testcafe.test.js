@@ -95,7 +95,7 @@ test('Click an array of labels and then check their states', async t => {
 // });
 
 
-// test('Filling a form', async t => {
+test('Filling a form', async t => {
 //     // Fill some basic fields
 //     await t
 //         .typeText(page.nameInput, 'Bruce Wayne')
@@ -120,4 +120,21 @@ test('Click an array of labels and then check their states', async t => {
 //         .wait(500)
 //         .click(page.submitButton)
 //         .expect(page.results.innerText).contains('Bruce Wayne');
-// });
+    const { I } = t.context
+
+    await I.fillField(page.nameInput, 'Bruce Wayne')
+    await I.checkOption(page.macOSRadioButton)
+    await I.checkOption(page.triedTestCafeCheckbox)
+
+    await I.fillField(page.commentsTextArea, 'It\'s... ')
+    await I.wait(1)
+    await I.fillField(page.commentsTextArea, '\n not as good as you think')
+    await I.fillField(page.commentsTextArea, '\n you might wanna try ava-codeceptjs')
+
+    await I.say('Filled the form')
+
+    await I.wait(1)
+    await I.click(page.submitButton)
+
+    await I.see('Bruce Wayne', page.results.innerText)
+});
