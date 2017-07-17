@@ -22,6 +22,7 @@ Concurrent, opinionated UI Testing. Using ava, codeceptjs, webdriverio and chrom
 - Automatically make a screenshot when a test fails
 - Automatically take screenshots of assertions
 - Use "plain" Javascript objects as page objects and require them explicitly in your tests. No global configuration and dependency injection magic.
+- Get meaningful stacktraces even in page object functions
 
 ## Install
 
