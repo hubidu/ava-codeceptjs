@@ -1,25 +1,27 @@
 ava-codeceptjs
 ==============
 
-Concurrent UI Testing with opinionated stack. Using ava, codeceptjs, webdriverio and chrome. 
+Concurrent, opinionated UI Testing. Using ava, codeceptjs, webdriverio and chrome. 
 
 ## Why
 
-Because
-
-- Using gherkin syntax in your UI tests does not make sense. Business people won't read (or even edit) your tests anyway. Developer productivity when writing the tests is and having a maintainable code base is what counts
-- Running tests concurrently will speed up your feedback loop
-- CodeceptJS has a nice API, but otherwise too much magic or unnecessary features
+- Writing UI tests in Gherkin syntax does not make sense. "Business People" won't bother to read the tests anyway.
+- UI tests are for developers/testers. They must be quick to write, simple to troubleshoot and easy to maintain. Developer productivity is paramount.
+- Running tests concurrently will speed up your feedback loop tremendously
+- I love Codeceptjs fluent and concise API
+- IMHO chrome headless is currently the best option to run your tests in
 
 ## Features
 
-- Tests are run concurrently speeding up total execution time
-- Use ava's watch mode to automatically run changed tests during development
+- UI tests can run concurrently to speed up total execution time of the test suite
+- Use ava's watch mode to automatically run affected tests on code changes
 - Uses async/await. No promise chain magic under the hood.
 - Uses ava's great assertion library, code excerpts, before/after hooks etc.
-- Automatically wait for elements before clicking, filling input fields or validating assertions
+- Use ava's snapshot feature to take an html snapshot of a part of the page and compare it to previous snapshots
+- Automatically wait for elements to become visible before clicking, filling input fields or validating assertions
 - Automatically make a screenshot when a test fails
 - Automatically take screenshots of assertions
+- Use "plain" Javascript objects as page objects and require them explicitly in your tests. No global configuration and dependency injection magic.
 
 ## Install
 
@@ -37,17 +39,18 @@ TBD
     * { 
       border: 1px solid rgba(0, 0, 0, 0.3);
     }
+- DONE Try ava snapshot feature
+- DONE Try ava failing test feature
+- DONE Try chrome headless
+- DONE Mark failed area on page
 
+
+- Use test name (and path) when creating output directory for screenshots
 - Improve element highlighting in screenshots
-- Try ava snapshot feature
-- Try ava failing test feature
 - Still problems creating screenshot directories
 - DOES NOT WORK: Make full page screenshots
-- test name should be part of the output directory
 - Extend Auto-Wait to all methods which are using selectors
-- Save screenshot when ava assertion fails
-- Try chrome headless
-- Mark failed area on page
+- Also save screenshots on failed ava assertions
 - Map codeceptjs assertion errors to ava assertion error
 - Suppport webdriverio errors
 - Convenience functions to login/cache login session (speed up login)

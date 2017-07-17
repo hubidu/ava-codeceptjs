@@ -5,6 +5,7 @@ const Smth = require('./Smth.js')
 scenario.beforeEach(async t => {
   const { I } = t.context
 
+  await I.resizeWindow(1900, 800)
   await Smth(I).openGitHub();
 })
 
@@ -20,18 +21,11 @@ scenario('search for codeceptjs', async t => {
   await I.see('Codeception/CodeceptJS', 'a');
 });
 
-// scenario('ava only', async t => {
-//     t.is('foo', 'bar')
-//     // throw new Error('BOOM')
-//     console.log(t._test.assertError)
-// })
-
-scenario.failing('signin should fail showing error message', async t => {
+scenario.failing('should fail because the page does not exist', async t => {
   const { I } = t.context
 
   await I.amOnPage('foo')
 })
-
 
 scenario('signin should fail showing error message', async t => {
   const { I } = t.context
@@ -50,6 +44,13 @@ scenario('signin should fail showing error message', async t => {
   await I.see('Incorrect username or password.', '.flash-error');
 });
 
+scenario('make sure the signup form stays the same', async t => {
+  const { I } = t.context
+
+  const signupHtml = await I.grabHTMLFrom('.btn.btn-primary.btn-large.f4.btn-block')
+  t.snapshot(signupHtml)
+})
+
 scenario('register', async t => {
   const { I } = t.context
 
@@ -58,7 +59,7 @@ scenario('register', async t => {
     await I.fillField('user[login]', 'User');
     await I.fillField('user[email]', 'user@user.com');
     await I.fillField('user[password]', 'user@user.com');
-    // await I.fillField('q', 'aaa');
+
     await I.see('Sign up for GitHub')
     await I.click('Sign up for GitHub');
   });
