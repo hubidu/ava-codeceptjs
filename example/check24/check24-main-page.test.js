@@ -12,8 +12,8 @@ test.only('Find a Rechtsschutzversicherung', async t => {
         await I.clickOnErgebnisseAnzeigen()
         await I.seeInsurances(29)
         await I.selectInsurances(3)
-
-        // TODO Extend to select and compare insurances
+        await I.clickOnVergleichen()
+        await I.seeVergleichsErgebnis()
     })
 })
 
