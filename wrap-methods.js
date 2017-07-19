@@ -83,6 +83,7 @@ function wrapFn (actor, fn) {
 
         try {
             // console.log(`I.${fn.name} - calling...`)
+            I._createOutputDirIfNecessary() // Must be here to extract the test file name from stack trace
 
             /**
              * Automatically wait for elements to become visible

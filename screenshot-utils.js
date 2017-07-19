@@ -4,18 +4,22 @@ const mkdirp = require('mkdirp')
 const rimraf = require('rimraf')
 
 const makeFileName = (str) => {
-    return str.replace(/[:\\\/\*\?><]/g, '')
+    return str.replace(/['":\\\/\*\?><]/g, '')
 }
 
- const screenshotDir = (t) =>`./_out/${makeFileName(t.title.replace('beforeEach for ', ''))}`
+ const screenshotDir = (prefix, title) =>`./__out/${prefix}/${makeFileName(title)}`
 
 module.exports = {  
-    createScreenshotDir(t) {
+    createScreenshotDir(prefix, title) {
         // Set this for saving screenshots
-        const outputDir = screenshotDir(t)
+        const outputDir = screenshotDir(prefix, title)
 
         try {
             rimraf.sync(`${outputDir}`, { maxBusyTries: 10 })
+        } catch (err) {
+            console.log(`Error removing output dir ${outputDir}`, err)
+        }
+        try {
             mkdirp.sync(outputDir)
         } catch (err) {
             console.log(`Error creating output dir ${outputDir}`, err)
@@ -24,9 +28,9 @@ module.exports = {
     },
 
     async saveScreenshot(actor, lineNumber, stepName, stepArgs = [], suffix = '', subdir = undefined) {
-        if (!actor.outputDir) throw new Error('Expected output directory on actor')
+        if (!actor._test) throw new Error('Expected test with output directory on actor')
 
-        let outputDir = actor.outputDir
+        let outputDir = actor._test.outputDir
         if (subdir) {
             outputDir = path.join(outputDir, subdir)
             mkdirp(outputDir)

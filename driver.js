@@ -1,15 +1,19 @@
-const webdriverio = require('webdriverio');
+const path = require('path')
+const fs = require('fs')
+const webdriverio = require('webdriverio')
 const WebDriverIO = require('codeceptjs/lib/helper/WebDriverIO')
 const { wrap } = require('./wrap-methods')
 const { addExtensions } = require('./add-extensions')
 
-module.exports = () => {
-    const wdioInstance = new WebDriverIO({
-                url: 'not important but non empty',  // Not important set in test
-                browser: 'chrome', // TODO Should be configurable
-                // windowSize: 'maximize', // TODO does not seem to work with chrome headless "automation error"
+const configFile = path.join(process.cwd(), '_config.js')
+let config = {
+    caps: []
+}
+if (fs.existsSync(configFile)) {
+    config = require(configFile).default
+}
 
-                 desiredCapabilities: {
+const chromeHeadless = {
                     browserName: 'chrome',
                     chromeOptions: {
                         // binary: '/usr/bin/google-chrome',
@@ -23,6 +27,14 @@ module.exports = () => {
                         ],
                     },
                 }
+
+module.exports = () => {
+    const wdioInstance = new WebDriverIO({
+                url: 'not important but non empty',  // Not important set in test
+                browser: 'chrome', // TODO Should be configurable
+                // windowSize: 'maximize', // TODO does not seem to work with chrome headless "automation error"
+
+                 desiredCapabilities: config.caps.indexOf('chrome-headless') > -1 ? chromeHeadless : {}
     }, WebDriverIO)
 
     return addExtensions(wdioInstance)

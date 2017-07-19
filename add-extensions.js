@@ -33,7 +33,7 @@ function saveScreen(fullPath) {
 function saveScreenshot(fileName) {
     const browser = this.browser
 
-    return browser.saveScreenshot(path.join(this.outputDir, fileName))
+    return browser.saveScreenshot(path.join(this._test.outputDir, fileName))
 }
 
 /**
@@ -71,6 +71,9 @@ function highlightElement(sel, text, isError = false) {
     }, sel, text, isError)
 }
 
+/**
+ * Display a box grid on the page
+ */
 function displayBoxGrid() {
     const browser = this.browser
 
@@ -90,6 +93,42 @@ function displayBoxGrid() {
     })
 }
 
+function _setTestTitle(title) {
+    this._test = {
+        title: title.replace('beforeEach for ', '')
+    }
+}
+
+function _createOutputDirIfNecessary() {
+    const parseErrorStack = (err) => {
+        const ErrorStackParser = require('error-stack-parser')
+        try {
+            return ErrorStackParser.parse(err)[0]
+        } catch (e) {
+            console.log('Failed to parse error stack', e, err)
+            return ''
+        }
+    }
+    const { createScreenshotDir } = require('./screenshot-utils.js')
+
+    if (this._test && this._test.prefix) return
+
+    const err = new Error()
+    err.stack = err.stack.split('\n').find(l => /(at test)|(at scenario)/.test(l))
+    const parsed = parseErrorStack(err)
+
+    const { fileName: testFileName } = parsed
+    const testRelPath = path.join('.', testFileName
+                            .replace(process.cwd() + path.sep, '')
+                            .replace(/\.test\.js/g, '')
+                            .replace(/\\/g, ' -- '))
+
+    if (!testRelPath) throw new Error('Expected to extract test file name from stack trace')
+
+    this._test.prefix = testRelPath
+    this._test.outputDir = createScreenshotDir(this._test.prefix, this._test.title)
+}
+
 const addExtensions = (actor) =>
     Object.assign(actor, {
         grabElementsFrom,
@@ -100,7 +139,9 @@ const addExtensions = (actor) =>
         saveScreenshot,
         say,
         highlightElement,
-        displayBoxGrid
+        displayBoxGrid,
+        _createOutputDirIfNecessary,
+        _setTestTitle
     })
 
 module.exports = {

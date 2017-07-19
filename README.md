@@ -45,11 +45,13 @@ TBD
 - DONE Try chrome headless
 - DONE Mark failed area on page
 
-
 - Use test name (and path) when creating output directory for screenshots
+- Add test case examples demonstrating features to README
 - Improve element highlighting in screenshots
-- Still problems creating screenshot directories
+- Still problems creating screenshot directories (on windows in watch mode when visual studio code is running)
+- Could automatically run selenium standalone in dev mode
 - DOES NOT WORK: Make full page screenshots
+- Need a cool full-text search to find tests
 - Extend Auto-Wait to all methods which are using selectors
 - Also save screenshots on failed ava assertions
 - Map codeceptjs assertion errors to ava assertion error

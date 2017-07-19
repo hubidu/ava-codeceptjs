@@ -38,6 +38,7 @@ async function within (sel, handlerFn) {
 
 test.beforeEach(async t => {
     try {
+        // console.log('Creating webdriver instance...')
         const I = wrap(driverCreate())
 
         await I._beforeSuite()
@@ -46,7 +47,7 @@ test.beforeEach(async t => {
         // TODO That depends on device being tested. Should be configurable
         // await I.resizeWindow('maximize')
 
-        await I.defineTimeout({ implicit: 10000, "page load": 10000, script: 5000 })
+        await I.defineTimeout({ implicit: 20000, "page load": 20000, script: 20000 })
         // Add plugins
         // wdioScreenshot.init(I.browser, {})
 
@@ -61,12 +62,13 @@ test.beforeEach(async t => {
     const I = t.context.I
     
     // Setup test output directory
-    t.context.outputDir = t.context.I.outputDir = createScreenshotDir(t)
+    I._setTestTitle(t.title)
 })
 test.afterEach.always(async t => {
     const I = t.context.I
     if (!I) return
 
+    // console.log('Destroying webdriver instance...')
     await I._after()
     await I._afterSuite()
 })
@@ -82,14 +84,11 @@ const parseErrorStack = (err) => {
 
 function createCatchErrors(testFn) {
     return async function (t) { // Leave it anonymous otherwise ava will use the function name
+
         try {
             // Ad these methods to each execution context
             t.on = on.bind(t)
             t.within = within.bind(t)
-
-            // Wrap actor methods
-            // t.context.I = wrap(t.context._I)
-            // Each test needs its own dedicated output directory
 
             // console.log(`${t.title} Running ...`)
             const ret = await testFn(t)
@@ -119,7 +118,6 @@ function createCatchErrors(testFn) {
                 message: err.message,
                 actual: err.actual,
                 expected: err.expected,
-                // source: source(__filename, 59),
                 fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
                 // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
                 stack: err.stack,
@@ -150,6 +148,7 @@ function createCatchErrors(testFn) {
  */
 const myTest = (name, handlerFn) => test(name, createCatchErrors(handlerFn))
 myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
+myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
 myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))
 myTest.afterEach = (handlerFn) => test.afterEach(createCatchErrors(handlerFn))
 myTest.afterEach.always = (handlerFn) => test.afterEach.always(createCatchErrors(handlerFn))
