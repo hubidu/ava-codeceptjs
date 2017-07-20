@@ -44,10 +44,10 @@ scenario('signin should fail showing error message', async t => {
   await I.see('Incorrect username or password.', '.flash-error');
 });
 
-scenario('make sure the signup form stays the same', async t => {
+scenario('make sure the signup button stays the same', async t => {
   const { I } = t.context
 
-  const signupHtml = await I.grabHTMLFrom('.btn.btn-primary.btn-large.f4.btn-block')
+  const signupHtml = await I.grabHTMLFrom({ css: '.btn.btn-primary.btn-large.f4.btn-block'})
   t.snapshot(signupHtml)
 })
 

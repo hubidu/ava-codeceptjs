@@ -26,6 +26,8 @@ async function on (pageObjClazz, handlerFn) {
 async function within (sel, handlerFn) {
     const actor = this.context.I
 
+    await actor.waitForVisible(sel)
+
     await actor._withinBegin(sel)
     try {
         await handlerFn()
@@ -47,7 +49,7 @@ test.beforeEach(async t => {
         // TODO That depends on device being tested. Should be configurable
         // await I.resizeWindow('maximize')
 
-        await I.defineTimeout({ implicit: 20000, "page load": 20000, script: 20000 })
+        await I.defineTimeout({ implicit: 20000, 'page load': 40000, script: 20000 })
         // Add plugins
         // wdioScreenshot.init(I.browser, {})
 
