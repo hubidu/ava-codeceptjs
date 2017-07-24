@@ -50,6 +50,8 @@ TBD
 - DONE Refactor check24 tests into separate files (ava concurrency is file concurrency)
 - Refactor ava-codecept code
 - Move examples to separate project
+- Conditionally check for elements
+- Can now check for console errors
 - Add test case examples to the README demonstrating the individual features
 - In a CI environment: How can we better detect serious problems and notify responsible people
 - Improve element highlighting in screenshots

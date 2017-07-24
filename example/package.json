@@ -1,10 +1,10 @@
 {
-  "name": "ava-codeceptjs-example",
+  "name": "ava-codeceptjs-examples",
   "version": "1.0.0",
-  "description": "Example test project for ava-codeceptjs",
+  "description": "Example tests for ava-codeceptjs",
   "main": "",
   "scripts": {
-    "test": "ava --concurrency=2 -v",
+    "test": "ava -c 2 -v",
     "test:watch": "npm t -- --watch"
   },
   "author": "Stefan Huber",

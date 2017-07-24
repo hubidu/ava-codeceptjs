@@ -65,7 +65,7 @@ const makeScreenshot = async (I, fn, args, isError = false) => {
             }
 
             await I.displayBoxGrid()
-            await saveScreenshot(I, Date.now() / 1000, fn.name, args, isError ? 'error' : '', isError ? '__steps__' : '')
+            await saveScreenshot(I, Date.now() / 1000, fn.name, args, isError ? 'error' : '', '')
         } catch (err) {
             console.log('ERROR Failed to save screenshot', err)
         }
@@ -92,7 +92,11 @@ function wrapFn (actor, fn) {
                 ['click', 'see', 'grabHTMLFrom', 'grabTextFrom', 'grabElementsFrom', 'fillField'].indexOf(fn.name) > -1 && 
                 isSelector(grabSelectorFromArgs(fn.name, args))
             ) {
-                await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 20)
+                try {
+                    await actor.waitForVisible(grabSelectorFromArgs(fn.name, args), 20)
+                } catch (err) {
+                    // Just ignore that to avoid failing on StaleElementReferenceException
+                }
             }
 
             // Execute the step

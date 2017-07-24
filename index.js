@@ -11,11 +11,16 @@ const { createScreenshotDir, saveScreenshot } = require('./screenshot-utils')
  * Do something in context of page object
  */
 async function on (pageObjClazz, handlerFn) {
-    const wrappedPageObject = wrap(new pageObjClazz(this.context.I))
+    const actor = this.context.I
+    // Create an instance of the page object class
+    // and wrap its methods to intercept and map exceptions
+    const wrappedPageObject = wrap(new pageObjClazz(actor))
 
     // Attach some context information
-    wrappedPageObject.outputDir = this.context.I.outputDir
-    wrappedPageObject.actor = this.context.I
+    if (!actor._test) throw new Error('Expected _test property on actor')
+    // wrappedPageObject.outputDir = this.context.I._test.outputDir
+    // Keep reference to actor for screenshotting
+    wrappedPageObject.actor = actor
 
     await handlerFn(wrappedPageObject)
 }
@@ -49,7 +54,7 @@ test.beforeEach(async t => {
         // TODO That depends on device being tested. Should be configurable
         // await I.resizeWindow('maximize')
 
-        await I.defineTimeout({ implicit: 20000, 'page load': 40000, script: 20000 })
+        await I.defineTimeout({ implicit: 5000, 'page load': 40000, script: 20000 })
         // Add plugins
         // wdioScreenshot.init(I.browser, {})
 
@@ -71,6 +76,7 @@ test.afterEach.always(async t => {
     if (!I) return
 
     // console.log('Destroying webdriver instance...')
+    await I.wait(2)
     await I._after()
     await I._afterSuite()
 })
