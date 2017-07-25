@@ -49,7 +49,7 @@ TBD
 - DONE Refactor check24 tests into separate files (ava concurrency is file concurrency)
 - DONE t.on should return new page object instance
 
-- Refactor ava-codecept code
+- DONE Refactor ava-codecept code
 - Move examples to separate project
 - Try again: Make full page screenshots
 - Conditionally check for elements
