@@ -45,11 +45,13 @@ TBD
 - DONE Try chrome headless
 - DONE Mark failed area on page
 - DONE Use test name (and path) when creating output directory for screenshots
-
 - DONE 'within' might fail, because I need to wait for context object to become visible first
 - DONE Refactor check24 tests into separate files (ava concurrency is file concurrency)
+- DONE t.on should return new page object instance
+
 - Refactor ava-codecept code
 - Move examples to separate project
+- Try again: Make full page screenshots
 - Conditionally check for elements
 - Can now check for console errors
 - Add test case examples to the README demonstrating the individual features
@@ -60,7 +62,6 @@ TBD
 - Mark tests as critical and "fire event" (e. g. send http request) when test fails
 - Still problems creating screenshot directories (on windows in watch mode when visual studio code is running)
 - Could automatically run selenium standalone in dev mode
-- DOES NOT WORK: Make full page screenshots
 - Need a cool full-text search to find tests efficiently
 - Extend Auto-Wait to all methods which are using selectors
 - Also save screenshots on failed ava assertions

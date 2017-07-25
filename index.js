@@ -10,11 +10,20 @@ const { createScreenshotDir, saveScreenshot } = require('./screenshot-utils')
 /**
  * Do something in context of page object
  */
-async function on (pageObjClazz, handlerFn) {
+async function on (PageObjectOrClazz, handlerFn) {
+    if (!PageObjectOrClazz) throw new Error('Expected to get a page object instance or a page object class')
+
     const actor = this.context.I
     // Create an instance of the page object class
     // and wrap its methods to intercept and map exceptions
-    const wrappedPageObject = wrap(new pageObjClazz(actor))
+    let wrappedPageObject
+    if (typeof PageObjectOrClazz === 'function') {
+        wrappedPageObject = wrap(new PageObjectOrClazz(actor))
+    } else if (typeof PageObjectOrClazz === 'object') {
+        wrappedPageObject = wrap(PageObjectOrClazz)
+    } else {
+        new Error('Expected to get a page object instance or a page object class')        
+    }
 
     // Attach some context information
     if (!actor._test) throw new Error('Expected _test property on actor')
@@ -22,7 +31,7 @@ async function on (pageObjClazz, handlerFn) {
     // Keep reference to actor for screenshotting
     wrappedPageObject.actor = actor
 
-    await handlerFn(wrappedPageObject)
+    return await handlerFn(wrappedPageObject)
 }
 
 /**
@@ -91,15 +100,14 @@ const parseErrorStack = (err) => {
 }
 
 function createCatchErrors(testFn) {
-    return async function (t) { // Leave it anonymous otherwise ava will use the function name
-
+    const catchingErrorsFn = async function (t, ...args) { // Leave it anonymous otherwise ava will use the function name
         try {
             // Ad these methods to each execution context
             t.on = on.bind(t)
             t.within = within.bind(t)
 
             // console.log(`${t.title} Running ...`)
-            const ret = await testFn(t)
+            const ret = await testFn(t, ...args)
             // console.log(`${t.title} Finished with result = `, ret)
         } catch (err) {      
             const values = []
@@ -149,12 +157,15 @@ function createCatchErrors(testFn) {
 
         }
     }
+    
+    if (testFn.title) catchingErrorsFn.title = testFn.title
+    return catchingErrorsFn
 } 
 
 /**
  * Wrap all ava test methods
  */
-const myTest = (name, handlerFn) => test(name, createCatchErrors(handlerFn))
+const myTest = (name, handlerFn, ...args) => test(name, createCatchErrors(handlerFn), ...args)
 myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
 myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
 myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))
