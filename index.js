@@ -3,9 +3,9 @@ const wdioScreenshot = require('wdio-screenshot')
 const { AssertionError } = require('ava/lib/assert')
 const ErrorStackParser = require('error-stack-parser')
 
-const { wrap } = require('./wrap-methods')
-const driverCreate = require('./driver')
-const { createScreenshotDir, saveScreenshot } = require('./screenshot-utils')
+const { wrap } = require('./lib/wrap-methods')
+const driverCreate = require('./lib/driver')
+const { createScreenshotDir, saveScreenshot } = require('./lib/screenshot-utils')
 
 /**
  * Do something in context of page object
