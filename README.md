@@ -5,15 +5,17 @@ Concurrent, opinionated UI Testing. Using ava, codeceptjs, webdriverio and chrom
 
 ## Why
 
-- Writing UI tests in Gherkin syntax does not make sense. "Business People" won't bother to read the tests anyway.
-- UI tests are for developers/testers. They must be quick to write, simple to troubleshoot and easy to maintain. Developer productivity is paramount.
-- Running tests concurrently will speed up your feedback loop tremendously
-- I love Codeceptjs fluent and concise API
-- IMHO chrome headless is currently the best option to run your tests in
+- Writing UI tests in Cucumber/Gherkin syntax feels clunky and is hard to troubleshoot (BTW "Business People" don't care about your tests anyway). CodeceptJS fluent and concise API is just fine for browser testing.
+- Page objects are a great way to organize your tests and they should just be "Plain Old Javascript Objects" (not like CodeceptJS)
+- Async/Await lets you write tests in a synchronous like style. No need for under-the-hood promise chain magic (like in CodeceptJS)
+- As a maintainer of an UI test suite I need concise error messages. Avas code excerpts are perfect for this.
+- Chrome headless is currently the most reliable option to run your tests. Phantomjs will no longer be maintained, Nightmarejs is flakey.
 
 ## Features
 
-- UI tests can run concurrently to speed up total execution time of the test suite
+A complete sample project is available in https://github.com/hubidu/ava-codeceptjs-examples
+
+- Run your UI tests concurrently and reduce total test execution time
 - Use ava's watch mode to automatically run affected tests on code changes
 - Uses async/await. No promise chain magic under the hood.
 - Uses ava's great assertion library, code excerpts, before/after hooks etc.
@@ -50,7 +52,7 @@ TBD
 - DONE t.on should return new page object instance
 
 - DONE Refactor ava-codecept code
-- Move examples to separate project
+- DONE Move examples to separate project
 - Try again: Make full page screenshots
 - Conditionally check for elements
 - Can now check for console errors
