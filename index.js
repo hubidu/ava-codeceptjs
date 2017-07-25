@@ -157,7 +157,7 @@ function createCatchErrors(testFn) {
 
         }
     }
-    
+
     if (testFn.title) catchingErrorsFn.title = testFn.title
     return catchingErrorsFn
 } 
@@ -166,6 +166,15 @@ function createCatchErrors(testFn) {
  * Wrap all ava test methods
  */
 const myTest = (name, handlerFn, ...args) => test(name, createCatchErrors(handlerFn), ...args)
+myTest.responsive = (name, devices, handlerFn) => {
+    if (typeof devices !== 'object') throw new Error('Expect devices to be an object with key "device name" and value [xRes, yRes]')
+
+    Object.keys(devices).forEach(deviceName => {
+        const resolution = devices[deviceName]
+        handlerFn.title = (providedTitle, resolution) => `[${deviceName}] ${providedTitle}`
+        myTest(name, handlerFn, resolution)
+    })
+}
 myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
 myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
 myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))

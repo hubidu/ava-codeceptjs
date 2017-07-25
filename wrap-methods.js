@@ -52,12 +52,10 @@ const grabSelectorFromArgs = (fnName, args) => {
     }
 }
 
+const isAutoScreenshotFunction = fnName => ['see', 'say', 'seeElement', 'seeInField', 'dontSee', 'dontSeeElement', 'dontSeeInField'].indexOf(fnName) > -1
 const actorFromActorOrPageObj = (actorOrPageObj) => actorOrPageObj.actor ? actorOrPageObj.actor : actorOrPageObj
 const makeScreenshot = async (I, fn, args, isError = false) => {
-    if (
-        (process.env.DEBUG && fn.name !== 'saveScreenshot') ||
-        (fn.name === 'say' || fn.name.indexOf('see') === 0 || fn.name.indexOf('dontSee') === 0)
-    ) {
+    if (isAutoScreenshotFunction(fn.name)) {
         try {
             // console.log('AFTER', fn.name)
             if (fn.name.indexOf('see') === 0 && isSelector(grabSelectorFromArgs(fn.name, args))) {

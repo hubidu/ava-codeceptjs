@@ -1,4 +1,5 @@
 const { scenario } = require('ava-codeceptjs')
+const devices = require('../../../devices.js')
 
 const SelectProductPage = require('./select-product.page')
 
@@ -27,7 +28,7 @@ scenario.beforeEach(async t => {
     await login(I, 'ava-codeceptjs@gmail.com', 'ava-codeceptjs')
 });
 
-const sucheNachDiversenVUsUndErhalteVorschlaege = async (t, resolution) => {
+scenario.responsive('Suche nach diversen VUs und erhalte Vorschlaege', devices, async (t, resolution) => {
     const { I } = t.context
     const [x, y] = resolution
 
@@ -47,15 +48,13 @@ const sucheNachDiversenVUsUndErhalteVorschlaege = async (t, resolution) => {
         await I.enter('Hessen') // by typing just one part of the insurance company
         await I.seeInsurance(['AOK Hessen'])
     })
-}
-sucheNachDiversenVUsUndErhalteVorschlaege.title = (providedTitle, resolution) => `[${resolution[0]}x${resolution[1]}] ${providedTitle}`
+})
 
-
-scenario('Suche nach diversen VUs und erhalte Vorschlaege', sucheNachDiversenVUsUndErhalteVorschlaege, [1900, 2048]);
-scenario('Suche nach diversen VUs und erhalte Vorschlaege', sucheNachDiversenVUsUndErhalteVorschlaege, [320, 568]);
-
-scenario('Suche mit \'techniker\' und erhalte TK', async t => {
+scenario.responsive('Suche mit \'techniker\' und erhalte TK', devices, async (t, resolution) => {
     const { I } = t.context
+    const [x, y] = resolution
+
+    await I.resizeWindow(x, y)
 
     const selectInsuranceCompanyPage = await t.on(SelectProductPage, async I => {
         await I.goThere()
@@ -70,8 +69,11 @@ scenario('Suche mit \'techniker\' und erhalte TK', async t => {
     })
 });
 
-scenario('Setze das Suchfeld zurück', async t => {
+scenario.responsive('Setze das Suchfeld zurück', devices, async (t, resolution) => {
     const { I } = t.context
+    const [x, y] = resolution
+
+    await I.resizeWindow(x, y)
 
     const selectInsuranceCompanyPage = await t.on(SelectProductPage, async I => {
         await I.goThere()
