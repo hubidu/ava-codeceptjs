@@ -4,13 +4,13 @@
   "description": "Concurrent UI testing with ava, codeceptjs, webdriverio and chrome headless",
   "main": "index.js",
   "author": {
-		"name": "Stefan Huber",
-		"email": "hubidev27@gmail.com"
-	},
+    "name": "Stefan Huber",
+    "email": "hubidev27@gmail.com"
+  },
   "license": "ISC",
   "engines": {
-		"node": ">=8"
-	},
+    "node": ">=8"
+  },
   "dependencies": {
     "codeceptjs": "^1.0.0",
     "error-stack-parser": "^2.0.1",
