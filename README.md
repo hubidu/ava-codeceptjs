@@ -54,20 +54,20 @@ TBD
 - DONE Move examples to separate project
 - DONE NEED IDEA How to run same test case on/for multiple devices
 
-- Still problems with ava --watch and removing directories
+- Still problems with ava --watch and removing directories (seems to be a windows problem)
 - Provide a Dockerfile to run the tests
 - Create a report file which can be used to create a nice, detailed test report
 - In a CI environment: How can we better detect serious problems and notify responsible people
 - Add test case examples to the README demonstrating the individual features
+- IDEA: Only save the last I.see... screenshot in a row
 - Try again: Make full page screenshots
 - Conditionally check for elements
 - Can now check for browser console errors
 - Improve element highlighting in screenshots
-- Take screenshots also before button clicks (or make that configurable?)
+- IDEA: Take screenshots also before button clicks (or make that configurable?)
 - Serve and watch output directory by http
 - Mark tests as critical and "fire event" (e. g. send http request) when test fails
 - Still problems creating screenshot directories (on windows in watch mode when visual studio code is running)
-- Could automatically run selenium standalone in dev mode
 - Need a cool full-text search to find tests efficiently
 - Extend Auto-Wait to all methods which are using selectors
 - Also save screenshots on failed ava assertions
