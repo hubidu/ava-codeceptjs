@@ -54,6 +54,7 @@ TBD
 - DONE Move examples to separate project
 - DONE NEED IDEA How to run same test case on/for multiple devices
 
+- Still problems with ava --watch and removing directories
 - Provide a Dockerfile to run the tests
 - Create a report file which can be used to create a nice, detailed test report
 - In a CI environment: How can we better detect serious problems and notify responsible people
