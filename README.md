@@ -50,14 +50,17 @@ TBD
 - DONE 'within' might fail, because I need to wait for context object to become visible first
 - DONE Refactor check24 tests into separate files (ava concurrency is file concurrency)
 - DONE t.on should return new page object instance
-
 - DONE Refactor ava-codecept code
 - DONE Move examples to separate project
+- DONE NEED IDEA How to run same test case on/for multiple devices
+
+- Provide a Dockerfile to run the tests
+- Create a report file which can be used to create a nice, detailed test report
+- In a CI environment: How can we better detect serious problems and notify responsible people
+- Add test case examples to the README demonstrating the individual features
 - Try again: Make full page screenshots
 - Conditionally check for elements
-- Can now check for console errors
-- Add test case examples to the README demonstrating the individual features
-- In a CI environment: How can we better detect serious problems and notify responsible people
+- Can now check for browser console errors
 - Improve element highlighting in screenshots
 - Take screenshots also before button clicks (or make that configurable?)
 - Serve and watch output directory by http
@@ -74,7 +77,6 @@ TBD
 - Record test duration
 - Integrate with a password/account manager software (e. g. passbolt)
 - Transparent page objects for multiple devices
-- NEED IDEA How to run same test case on/for multiple devices
 - Better when in headless mode: Would be nice if chrome would not steal the focus
 - Remove wrapped methods from call stack: WebDriverIO.wrapped [as seeNumberOfElements] (wrap-methods.js:34:31)
 - Would be cool to integrate something like quokka

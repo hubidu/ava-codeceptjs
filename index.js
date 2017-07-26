@@ -85,7 +85,6 @@ test.afterEach.always(async t => {
     if (!I) return
 
     // console.log('Destroying webdriver instance...')
-    await I.wait(2)
     await I._after()
     await I._afterSuite()
 })
