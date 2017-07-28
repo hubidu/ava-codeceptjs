@@ -53,10 +53,13 @@ TBD
 - DONE Refactor ava-codecept code
 - DONE Move examples to separate project
 - DONE NEED IDEA How to run same test case on/for multiple devices
+- DONE Still problems with ava --watch and removing directories (seems to be a windows problem)
 
-- Still problems with ava --watch and removing directories (seems to be a windows problem)
 - Provide a Dockerfile to run the tests
+- Save browser logs to disk on error
+- Also show the 'original' stack trace (from within page object or function)
 - Create a report file which can be used to create a nice, detailed test report
+- Can I find out if an element is still being animated (to avoid situations like "Element <svg width="30" height="30">...</svg> is not clickable at point (46, 503). Other element would receive the click: <div class="OnboardingBanner">...</div>")
 - In a CI environment: How can we better detect serious problems and notify responsible people
 - Add test case examples to the README demonstrating the individual features
 - IDEA: Only save the last I.see... screenshot in a row

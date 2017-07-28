@@ -149,7 +149,7 @@ function createCatchErrors(testFn) {
             }
             if (err._failedStep) {
                 const screenshotFileName = 
-                    await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, '.error')
+                    await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
 
                 values.push({ label: 'Error Screenshot:', formatted: screenshotFileName })
             }
