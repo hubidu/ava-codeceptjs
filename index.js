@@ -6,51 +6,8 @@ const ErrorStackParser = require('error-stack-parser')
 const { wrap } = require('./lib/wrap-methods')
 const driverCreate = require('./lib/driver')
 const { createScreenshotDir, saveScreenshot } = require('./lib/screenshot-utils')
-
-/**
- * Do something in context of page object
- */
-async function on (PageObjectOrClazz, handlerFn) {
-    if (!PageObjectOrClazz) throw new Error('Expected to get a page object instance or a page object class')
-
-    const actor = this.context.I
-    // Create an instance of the page object class
-    // and wrap its methods to intercept and map exceptions
-    let wrappedPageObject
-    if (typeof PageObjectOrClazz === 'function') {
-        wrappedPageObject = wrap(new PageObjectOrClazz(actor))
-    } else if (typeof PageObjectOrClazz === 'object') {
-        wrappedPageObject = wrap(PageObjectOrClazz)
-    } else {
-        new Error('Expected to get a page object instance or a page object class')        
-    }
-
-    // Attach some context information
-    if (!actor._test) throw new Error('Expected _test property on actor')
-    // wrappedPageObject.outputDir = this.context.I._test.outputDir
-    // Keep reference to actor for screenshotting
-    wrappedPageObject.actor = actor
-
-    return await handlerFn(wrappedPageObject)
-}
-
-/**
- * Do something in context of an element on the page
- */
-async function within (sel, handlerFn) {
-    const actor = this.context.I
-
-    await actor.waitForVisible(sel)
-
-    await actor._withinBegin(sel)
-    try {
-        await handlerFn()
-    } catch (err) {
-        await actor._withinEnd()
-        throw err    
-    }
-    await actor._withinEnd()
-}
+const { createReport, saveReport } = require('./lib/reporter')
+const { on, within } = require('./lib/context-methods')
 
 test.beforeEach(async t => {
     try {
@@ -98,6 +55,25 @@ const parseErrorStack = (err) => {
     }
 }
 
+const createAvaAssertion = (err, testStackframe, values) => {
+    const avaAssertion = new AssertionError({
+        name: 'AssertionError',
+        assertion: 'is',
+        improperUsage: false,
+        // type: 'exception',
+        message: err.message,
+        actual: err.actual,
+        expected: err.expected,
+        fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
+        // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
+        stack: err.stack,
+        values
+    })
+    return avaAssertion
+}
+
+const isHook = testFn => testFn.type === 'hook'
+
 function createCatchErrors(testFn) {
     const catchingErrorsFn = async function (t, ...args) { // Leave it anonymous otherwise ava will use the function name
         try {
@@ -105,9 +81,11 @@ function createCatchErrors(testFn) {
             t.on = on.bind(t)
             t.within = within.bind(t)
 
-            // console.log(`${t.title} Running ...`)
+            // console.log(`'${t.title}' Running ...`)
             const ret = await testFn(t, ...args)
-            // console.log(`${t.title} Finished with result = `, ret)
+            // console.log(`'${t.title}' Finished with result = `, ret)
+
+            if (!isHook(testFn)) await saveReport(t, createReport(t))
         } catch (err) {      
             const values = []
             
@@ -116,6 +94,8 @@ function createCatchErrors(testFn) {
             // Correct the stack trace
             // TODO: There might be ava assertions
             // TODO: There might be webdriverio errors which stack can not be parsed
+
+            // TODO Use different strategy: Find error location in the test then find actual source of the error 
             const orgStack = err.stack
             err.stack = err.stack.split('\n').slice(2).join('\n')
             const testStackframe = parseErrorStack(err)
@@ -125,20 +105,7 @@ function createCatchErrors(testFn) {
                 values.push({ label: 'expected', formatted: err.expected })
             }
 
-            const avaAssertion = new AssertionError({
-                name: 'AssertionError',
-                assertion: 'is',
-                improperUsage: false,
-                // type: 'exception',
-                message: err.message,
-                actual: err.actual,
-                expected: err.expected,
-                fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
-                // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
-                stack: err.stack,
-                values
-            })
-            t._test.addFailedAssertion(avaAssertion)
+            t._test.addFailedAssertion(createAvaAssertion(err, testStackframe, values))
 
             // Save error screenshot
             if (!err._failedStep) {
@@ -152,6 +119,8 @@ function createCatchErrors(testFn) {
                     await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
 
                 values.push({ label: 'Error Screenshot:', formatted: screenshotFileName })
+
+                await saveReport(t, createReport(t, err, testStackframe))
             }
 
         }
@@ -176,9 +145,18 @@ myTest.responsive = (name, devices, handlerFn) => {
 }
 myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
 myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
-myTest.beforeEach = (handlerFn) => test.beforeEach(createCatchErrors(handlerFn))
-myTest.afterEach = (handlerFn) => test.afterEach(createCatchErrors(handlerFn))
-myTest.afterEach.always = (handlerFn) => test.afterEach.always(createCatchErrors(handlerFn))
+myTest.beforeEach = (handlerFn) => {
+    handlerFn.type = 'hook'
+    return test.beforeEach(createCatchErrors(handlerFn))
+}
+myTest.afterEach = (handlerFn) => {
+    handlerFn.type = 'hook'
+    return test.afterEach(createCatchErrors(handlerFn))
+}
+myTest.afterEach.always = (handlerFn) => {
+    handlerFn.type = 'hook'
+    return test.afterEach.always(createCatchErrors(handlerFn))
+}
 myTest.failing = (name, handlerFn) => test.failing(name, createCatchErrors(handlerFn))
 
 module.exports = {
