@@ -81,6 +81,8 @@ function createCatchErrors(testFn) {
             t.on = on.bind(t)
             t.within = within.bind(t)
 
+            if (!isHook(testFn)) t.context.startedAt = Date.now()
+
             // console.log(`'${t.title}' Running ...`)
             const ret = await testFn(t, ...args)
             // console.log(`'${t.title}' Finished with result = `, ret)
@@ -115,12 +117,12 @@ function createCatchErrors(testFn) {
                 }
             }
             if (err._failedStep) {
-                const screenshotFileName = 
+                const errorScreenshotFile = 
                     await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
 
-                values.push({ label: 'Error Screenshot:', formatted: screenshotFileName })
+                values.push({ label: 'Error Screenshot:', formatted: errorScreenshotFile })
 
-                await saveReport(t, createReport(t, err, testStackframe))
+                await saveReport(t, createReport(t, err, testStackframe, errorScreenshotFile))
             }
 
         }
