@@ -117,6 +117,9 @@ function createCatchErrors(testFn) {
                 }
             }
             if (err._failedStep) {
+                const I = t.context.I
+                t.context.pageUrl = await I.browser.getUrl()
+                t.context.pageTitle = await I.grabTitle()
                 const errorScreenshotFile = 
                     await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
 
