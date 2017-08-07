@@ -1,13 +1,13 @@
 const { test } = require('ava')
 const wdioScreenshot = require('wdio-screenshot')
 const { AssertionError } = require('ava/lib/assert')
-const ErrorStackParser = require('error-stack-parser')
 
 const { wrap } = require('./lib/wrap-methods')
 const driverCreate = require('./lib/driver')
 const { createScreenshotDir, saveScreenshot } = require('./lib/screenshot-utils')
 const { createReport, saveReport } = require('./lib/reporter')
 const { on, within } = require('./lib/context-methods')
+const { parseStack } = require('./lib/error-stack')
 
 test.beforeEach(async t => {
     try {
@@ -46,15 +46,6 @@ test.afterEach.always(async t => {
     await I._afterSuite()
 })
 
-const parseErrorStack = (err) => {
-    try {
-        return ErrorStackParser.parse(err)[0]
-    } catch (e) {
-        console.log('Failed to parse error stack', e, err)
-        return ''
-    }
-}
-
 const createAvaAssertion = (err, testStackframe, values) => {
     const avaAssertion = new AssertionError({
         name: 'AssertionError',
@@ -81,14 +72,27 @@ function createCatchErrors(testFn) {
             t.on = on.bind(t)
             t.within = within.bind(t)
 
-            if (!isHook(testFn)) t.context.startedAt = Date.now()
+            const I = t.context.I
+
+            // Attach report data model to the context
+            if (!isHook(testFn)) {
+                t.context._report = {
+                    startedAt: Date.now()
+                }
+            }
 
             // console.log(`'${t.title}' Running ...`)
             const ret = await testFn(t, ...args)
             // console.log(`'${t.title}' Finished with result = `, ret)
 
-            if (!isHook(testFn)) await saveReport(t, createReport(t))
+            if (!isHook(testFn)) {
+                t.context._report = Object.assign({}, t.context._report, {
+                    screenshots: I._getReportData()
+                })
+                await saveReport(t, createReport(t))
+            } 
         } catch (err) {      
+            const I = t.context.I
             const values = []
             
             // console.log('createCatchErrors', err)
@@ -100,7 +104,7 @@ function createCatchErrors(testFn) {
             // TODO Use different strategy: Find error location in the test then find actual source of the error 
             const orgStack = err.stack
             err.stack = err.stack.split('\n').slice(2).join('\n')
-            const testStackframe = parseErrorStack(err)
+            const testStackframe = parseStack(err)
 
             if (err.actual && err.expected) {
                 values.push({ label: 'actual', formatted: err.actual })
@@ -117,15 +121,21 @@ function createCatchErrors(testFn) {
                 }
             }
             if (err._failedStep) {
-                const I = t.context.I
-                t.context.pageUrl = await I.browser.getUrl()
-                t.context.pageTitle = await I.grabTitle()
-                const errorScreenshotFile = 
-                    await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
+                // Add url and title to report
+                // const pageUrl = await I.browser.getUrl()
+                // const pageTitle = await I.grabTitle()
+                // t.context._report = Object.assign({}, t.context._report, {
+                //     pageUrl,
+                //     pageTitle
+                // })
+                // const errorScreenshotFile = 
+                //     await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
 
-                values.push({ label: 'Error Screenshot:', formatted: errorScreenshotFile })
-
-                await saveReport(t, createReport(t, err, testStackframe, errorScreenshotFile))
+                // values.push({ label: 'Error Screenshot:', formatted: errorScreenshotFile })
+                t.context._report = Object.assign({}, t.context._report, {
+                    screenshots: I._getReportData()
+                })
+                await saveReport(t, createReport(t, err, testStackframe))
             }
 
         }

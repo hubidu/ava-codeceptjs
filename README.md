@@ -55,7 +55,7 @@ TBD
 - DONE NEED IDEA How to run same test case on/for multiple devices
 - DONE Still problems with ava --watch and removing directories (seems to be a windows problem)
 
-- Provide a Dockerfile to run the tests
+- Store screenshot with stacktrace in report
 - Display page title (and url) in the error screenshot
 - DONE Save browser logs to disk on error
 - Also show the 'original' stack trace (from within page object or function)
