@@ -121,17 +121,7 @@ function createCatchErrors(testFn) {
                 }
             }
             if (err._failedStep) {
-                // Add url and title to report
-                // const pageUrl = await I.browser.getUrl()
-                // const pageTitle = await I.grabTitle()
-                // t.context._report = Object.assign({}, t.context._report, {
-                //     pageUrl,
-                //     pageTitle
-                // })
-                // const errorScreenshotFile = 
-                //     await saveScreenshot(t.context.I, testStackframe.lineNumber, err._failedStep.name, err._failedStep.args, 'error')
-
-                // values.push({ label: 'Error Screenshot:', formatted: errorScreenshotFile })
+                // Get collected report data and attach to context
                 t.context._report = Object.assign({}, t.context._report, {
                     screenshots: I._getReportData()
                 })

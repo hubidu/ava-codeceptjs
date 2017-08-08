@@ -54,12 +54,12 @@ TBD
 - DONE Move examples to separate project
 - DONE NEED IDEA How to run same test case on/for multiple devices
 - DONE Still problems with ava --watch and removing directories (seems to be a windows problem)
-
-- Store screenshot with stacktrace in report
-- Display page title (and url) in the error screenshot
+- DONE Store screenshot with stacktrace in report
+- DONE Display page title (and url) in the error screenshot
 - DONE Save browser logs to disk on error
-- Also show the 'original' stack trace (from within page object or function)
-- Create a report file which can be used to create a nice, detailed test report
+- DONE Also show the 'original' stack trace (from within page object or function)
+- DONE Create a report file which can be used to create a nice, detailed test report
+
 - Can I find out if an element is still being animated (to avoid situations like "Element <svg width="30" height="30">...</svg> is not clickable at point (46, 503). Other element would receive the click: <div class="OnboardingBanner">...</div>")
 - In a CI environment: How can we better detect serious problems and notify responsible people
 - Add test case examples to the README demonstrating the individual features
