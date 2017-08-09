@@ -106,10 +106,10 @@ function createCatchErrors(testFn) {
             err.stack = err.stack.split('\n').slice(2).join('\n')
             const testStackframe = parseStack(err)
 
-            if (err.actual && err.expected) {
-                values.push({ label: 'actual', formatted: err.actual })
-                values.push({ label: 'expected', formatted: err.expected })
-            }
+            // if (err.actual && err.expected) {
+            //     values.push({ label: 'actual', formatted: err.actual })
+            //     values.push({ label: 'expected', formatted: err.expected })
+            // }
 
             t._test.addFailedAssertion(createAvaAssertion(err, testStackframe, values))
 
