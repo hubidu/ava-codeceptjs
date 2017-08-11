@@ -17,10 +17,9 @@ test.beforeEach(async t => {
         await I._beforeSuite()
         await I._before()
 
-        // TODO That depends on device being tested. Should be configurable
-        // await I.resizeWindow('maximize')
+        // await I.defineTimeout({ 'page load': 40000, script: 20000 })
+        // await I.defineTimeout({ implicit: 5000, 'page load': 40000, script: 20000 })
 
-        await I.defineTimeout({ implicit: 5000, 'page load': 40000, script: 20000 })
         // Add plugins
         // wdioScreenshot.init(I.browser, {})
 
