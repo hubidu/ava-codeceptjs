@@ -95,8 +95,6 @@ function createCatchErrors(testFn) {
             const I = t.context.I
             const values = []
             
-            // console.log('createCatchErrors', err)
-
             // Correct the stack trace
             // TODO: There might be ava assertions
             // TODO: There might be webdriverio errors which stack can not be parsed
@@ -106,14 +104,9 @@ function createCatchErrors(testFn) {
             err.stack = err.stack.split('\n').slice(2).join('\n')
             const testStackframe = parseStack(err)
 
-            // if (err.actual && err.expected) {
-            //     values.push({ label: 'actual', formatted: err.actual })
-            //     values.push({ label: 'expected', formatted: err.expected })
-            // }
-
             t._test.addFailedAssertion(createAvaAssertion(err, testStackframe, values))
 
-            // Save error screenshot
+            // Attach failed step info
             if (!err._failedStep) {
                 err._failedStep = {
                     name: `line ${testStackframe.lineNumber}`,
