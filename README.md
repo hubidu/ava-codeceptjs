@@ -60,6 +60,7 @@ TBD
 - DONE Also show the 'original' stack trace (from within page object or function)
 - DONE Create a report file which can be used to create a nice, detailed test report
 
+- Improve element highlighting: dont change highlighted element and if element can not be found add command to top of page
 - Add logs to report.json
 - Use webdriverio scrollTo function when taking the error screenshot
 - Remove from stacktraces: at WebDriverIO.wrapped [as see] (C:\\Users\\stefan.huber\\projects\\server-cons
