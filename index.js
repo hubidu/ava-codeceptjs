@@ -1,5 +1,5 @@
-const { test } = require('ava')
-const wdioScreenshot = require('wdio-screenshot')
+// const { test } = require('ava')
+// const wdioScreenshot = require('wdio-screenshot')
 const { AssertionError } = require('ava/lib/assert')
 
 const { wrap } = require('./lib/wrap-methods')
@@ -9,58 +9,58 @@ const { createReport, saveReport } = require('./lib/reporter')
 const { on, within } = require('./lib/context-methods')
 const { parseStack } = require('./lib/error-stack')
 
-test.beforeEach(async t => {
-    try {
-        // console.log('Creating webdriver instance...')
-        const I = wrap(driverCreate())
+// test.beforeEach(async t => {
+//     try {
+//         // console.log('Creating webdriver instance...')
+//         const I = wrap(driverCreate())
 
-        await I._beforeSuite()
-        await I._before()
+//         await I._beforeSuite()
+//         await I._before()
 
-        // await I.defineTimeout({ 'page load': 40000, script: 20000 })
-        // await I.defineTimeout({ implicit: 5000, 'page load': 40000, script: 20000 })
+//         // await I.defineTimeout({ 'page load': 40000, script: 20000 })
+//         // await I.defineTimeout({ implicit: 5000, 'page load': 40000, script: 20000 })
 
-        // Add plugins
-        // wdioScreenshot.init(I.browser, {})
+//         // Add plugins
+//         // wdioScreenshot.init(I.browser, {})
 
-        // Attach additional objects to test context
-        t.context.I = I
-    } catch (err) {
-        if (err.message.indexOf('ECONNREFUSED') >= 0) throw new Error('Could not connect to selenium server! Did you start it?')
-        throw new Error(err)
-    }
-})
-test.beforeEach(async t => {
-    const I = t.context.I
+//         // Attach additional objects to test context
+//         t.context.I = I
+//     } catch (err) {
+//         if (err.message.indexOf('ECONNREFUSED') >= 0) throw new Error('Could not connect to selenium server! Did you start it?')
+//         throw new Error(err)
+//     }
+// })
+// test.beforeEach(async t => {
+//     const I = t.context.I
     
-    // Setup test output directory
-    I._setTestTitle(t.title)
-})
-test.afterEach.always(async t => {
-    const I = t.context.I
-    if (!I) return
+//     // Setup test output directory
+//     I._setTestTitle(t.title)
+// })
+// test.afterEach.always(async t => {
+//     const I = t.context.I
+//     if (!I) return
 
-    // console.log('Destroying webdriver instance...')
-    await I._after()
-    await I._afterSuite()
-})
+//     // console.log('Destroying webdriver instance...')
+//     await I._after()
+//     await I._afterSuite()
+// })
 
-const createAvaAssertion = (err, testStackframe, values) => {
-    const avaAssertion = new AssertionError({
-        name: 'AssertionError',
-        assertion: 'is',
-        improperUsage: false,
-        // type: 'exception',
-        message: err.message,
-        actual: err.actual,
-        expected: err.expected,
-        fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
-        // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
-        stack: err.stack,
-        values
-    })
-    return avaAssertion
-}
+// const createAvaAssertion = (err, testStackframe, values = []) => {
+//     const avaAssertion = new AssertionError({
+//         name: 'AssertionError',
+//         assertion: 'is',
+//         improperUsage: false,
+//         // type: 'exception',
+//         message: err.message,
+//         actual: err.actual,
+//         expected: err.expected,
+//         fixedSource: { file: testStackframe.fileName, line: testStackframe.lineNumber },
+//         // statements: ['I.amOnPage()', 'Foo()', 'Bar'],
+//         stack: err.stack,
+//         values
+//     })
+//     return avaAssertion
+// }
 
 const isHook = testFn => testFn.type === 'hook'
 
@@ -130,33 +130,101 @@ function createCatchErrors(testFn) {
 /**
  * Wrap all ava test methods
  */
-const myTest = (name, handlerFn, ...args) => test(name, createCatchErrors(handlerFn), ...args)
-myTest.responsive = (name, devices, handlerFn) => {
-    if (typeof devices !== 'object') throw new Error('Expect devices to be an object with key "device name" and value [xRes, yRes]')
+// const myTest = (name, handlerFn, ...args) => test(name, createCatchErrors(handlerFn), ...args)
+// myTest.responsive = (name, devices, handlerFn) => {
+//     if (typeof devices !== 'object') throw new Error('Expect devices to be an object with key "device name" and value [xRes, yRes]')
 
-    Object.keys(devices).forEach(deviceName => {
-        const resolution = devices[deviceName]
-        handlerFn.title = (providedTitle, resolution) => `[${deviceName}] ${providedTitle}`
-        myTest(name, handlerFn, resolution)
-    })
+//     Object.keys(devices).forEach(deviceName => {
+//         const resolution = devices[deviceName]
+//         handlerFn.title = (providedTitle, resolution) => `[${deviceName}] ${providedTitle}`
+//         myTest(name, handlerFn, resolution)
+//     })
+// }
+// myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
+// myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
+// myTest.beforeEach = (handlerFn) => {
+//     handlerFn.type = 'hook'
+//     return test.beforeEach(createCatchErrors(handlerFn))
+// }
+// myTest.afterEach = (handlerFn) => {
+//     handlerFn.type = 'hook'
+//     return test.afterEach(createCatchErrors(handlerFn))
+// }
+// myTest.afterEach.always = (handlerFn) => {
+//     handlerFn.type = 'hook'
+//     return test.afterEach.always(createCatchErrors(handlerFn))
+// }
+// myTest.failing = (name, handlerFn) => test.failing(name, createCatchErrors(handlerFn))
+
+
+const inBrowser = fn => {
+    return async t => {
+        if (!t.context.I) {
+            const I = wrap(driverCreate())
+
+            await I._beforeSuite()
+            await I._before()
+
+            // Ad these methods to each execution context
+            t.on = on.bind(t)
+            t.within = within.bind(t)
+
+            t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
+                                            // codeceptjs see... methods (usually)
+            t.context.I = I
+            I._setTestTitle(t.title)
+        }
+
+        const { I } = t.context
+        try {
+
+            // Attach report data model to the context
+            if (t._test.metadata.type === 'test') {
+                t.context._report = {
+                    startedAt: Date.now() // TODO use test start date
+                }
+            }
+
+            await fn(t, t.context.I)
+
+            if (t._test.assertCount > 0) {
+                // TODO Fail the test
+                // TODO Better: wrap ava' t.is, t.deepEqual etc and throw on first fail
+            }
+
+            if (t._test.metadata.type === 'test') {
+                t.context._report = Object.assign({}, t.context._report, {
+                    screenshots: I._getReportData()
+                })
+                await saveReport(t, createReport(t))
+            } 
+
+        } catch (err) {
+            if (err instanceof AssertionError) {
+                t._test.addFailedAssertion(err)
+
+                // Save Report
+                t.context._report = Object.assign({}, t.context._report, {
+                    screenshots: I._getReportData()
+                })
+                await saveReport(t, createReport(t, err))     // TODO Check error stack           
+            } else {
+                throw err
+            }
+        } finally {
+            if (t.context.I) {
+                await t.context.I._after()
+                await t.context.I._afterSuite()
+            }
+        }
+
+    }
 }
-myTest.only = (name, handlerFn) => test.only(name, createCatchErrors(handlerFn))
-myTest.skip = (name, handlerFn) => test.skip(name, createCatchErrors(handlerFn))
-myTest.beforeEach = (handlerFn) => {
-    handlerFn.type = 'hook'
-    return test.beforeEach(createCatchErrors(handlerFn))
-}
-myTest.afterEach = (handlerFn) => {
-    handlerFn.type = 'hook'
-    return test.afterEach(createCatchErrors(handlerFn))
-}
-myTest.afterEach.always = (handlerFn) => {
-    handlerFn.type = 'hook'
-    return test.afterEach.always(createCatchErrors(handlerFn))
-}
-myTest.failing = (name, handlerFn) => test.failing(name, createCatchErrors(handlerFn))
+
 
 module.exports = {
-    test: myTest,
-    scenario: myTest
+    inBrowser,
+
+    // test: myTest,
+    // scenario: myTest
 }

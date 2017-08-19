@@ -21,7 +21,7 @@
     "webdriverio": "^4.8.0"
   },
   "devDependencies": {
-    "ava": "^0.21.0"
+    "ava": "^0.22.0"
   },
   "peerDependencies": {
     "ava": "*"
