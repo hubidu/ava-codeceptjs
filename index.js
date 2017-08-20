@@ -157,8 +157,15 @@ function createCatchErrors(testFn) {
 // myTest.failing = (name, handlerFn) => test.failing(name, createCatchErrors(handlerFn))
 
 
-const inBrowser = fn => {
+const execTestInBrowser = (opts, fn) => {
+    if (typeof opts === 'function') {
+        fn = opts
+        opts = { teardown: true }
+    }
     return async t => {
+        t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
+                                        // codeceptjs see... methods (usually)
+
         if (!t.context.I) {
             const I = wrap(driverCreate())
 
@@ -169,8 +176,6 @@ const inBrowser = fn => {
             t.on = on.bind(t)
             t.within = within.bind(t)
 
-            t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
-                                            // codeceptjs see... methods (usually)
             t.context.I = I
             I._setTestTitle(t.title)
         }
@@ -179,12 +184,13 @@ const inBrowser = fn => {
         try {
 
             // Attach report data model to the context
-            if (t._test.metadata.type === 'test') {
+            if (!t.context._report) {
                 t.context._report = {
                     startedAt: Date.now() // TODO use test start date
                 }
             }
 
+            // Execute the test or hook function
             await fn(t, t.context.I)
 
             if (t._test.assertCount > 0) {
@@ -192,39 +198,39 @@ const inBrowser = fn => {
                 // TODO Better: wrap ava' t.is, t.deepEqual etc and throw on first fail
             }
 
-            if (t._test.metadata.type === 'test') {
-                t.context._report = Object.assign({}, t.context._report, {
-                    screenshots: I._getReportData()
-                })
-                await saveReport(t, createReport(t))
-            } 
 
         } catch (err) {
             if (err instanceof AssertionError) {
                 t._test.addFailedAssertion(err)
-
-                // Save Report
-                t.context._report = Object.assign({}, t.context._report, {
-                    screenshots: I._getReportData()
-                })
-                await saveReport(t, createReport(t, err))     // TODO Check error stack           
             } else {
                 throw err
             }
         } finally {
             if (t.context.I) {
-                await t.context.I._after()
-                await t.context.I._afterSuite()
+                if (opts.teardown) {
+                    // Teardown browser instance
+                    await t.context.I._after()
+                    await t.context.I._afterSuite()
+
+                    // Save report file
+                    t.context._report = Object.assign({}, t.context._report, {
+                        screenshots: I._getReportData()
+                    })
+                    await saveReport(t, createReport(t))
+                }
             }
         }
 
     }
 }
 
+const inBrowser = (opts, fn) => execTestInBrowser(opts, fn)
+const prepareBrowser = fn => execTestInBrowser({ teardown: false }, fn)
+const teardownBrowser = fn => execTestInBrowser({ teardown: true }, fn)
+
 
 module.exports = {
+    prepareBrowser,
+    teardownBrowser,
     inBrowser,
-
-    // test: myTest,
-    // scenario: myTest
 }
