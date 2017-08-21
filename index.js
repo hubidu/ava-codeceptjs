@@ -18,8 +18,7 @@ const execTestInBrowser = (opts, fn) => {
 
         t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
                                         // codeceptjs see... methods (usually)
-
-        if (!t.context.I) {
+        if (t.context && !t.context.I) { // after.always has no context
             const I = wrap(driverCreate())
 
             await I._beforeSuite()
