@@ -63,15 +63,17 @@ const execTestInBrowser = (opts, fn) => {
         } finally {
             if (t.context.I) {
                 if (opts.teardown) {
-                    // Teardown browser instance
-                    await t.context.I._after()
-                    await t.context.I._afterSuite()
-
                     // Save report file
                     t.context._report = Object.assign({}, t.context._report, {
                         screenshots: I._getReportData()
                     })
                     await saveReport(t, createReport(t))
+                    
+                    // Teardown browser instance
+                    await t.context.I._after()
+                    await t.context.I._afterSuite()
+
+                    t.context.I = undefined
                 }
             }
         }

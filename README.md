@@ -59,7 +59,9 @@ TBD
 - DONE Save browser logs to disk on error
 - DONE Also show the 'original' stack trace (from within page object or function)
 - DONE Create a report file which can be used to create a nice, detailed test report
+- DONE Record test duration
 
+- Use I.say(...) to log steps for reports
 - Replace codeceptjs file upload with a version without global variables
 - Improve element highlighting: dont change highlighted element and if element can not be found add command to top of page
 - Add logs to report.json
@@ -85,9 +87,7 @@ TBD
 - Suppport webdriverio errors
 - Convenience functions to login/cache login session (speed up login)
 - Store last successful screenshot and show on error compared with error screen
-- Record test duration
 - Integrate with a password/account manager software (e. g. passbolt)
 - Transparent page objects for multiple devices
 - Better when in headless mode: Would be nice if chrome would not steal the focus
-- Remove wrapped methods from call stack: WebDriverIO.wrapped [as seeNumberOfElements] (wrap-methods.js:34:31)
 - Would be cool to integrate something like quokka
