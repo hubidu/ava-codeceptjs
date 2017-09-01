@@ -3,7 +3,8 @@ const { AssertionError } = require('ava/lib/assert')
 const { wrap } = require('./lib/wrap-methods')
 const driverCreate = require('./lib/driver')
 const { createReport, saveReport } = require('./lib/reporter')
-const { on, within } = require('./lib/context-methods')
+const { on, within, step } = require('./lib/context-methods')
+const { extractOutline } = require('./lib/extract-outline')
 
 const execTestInBrowser = (opts, fn) => {
     if (typeof opts === 'function') {
@@ -18,7 +19,7 @@ const execTestInBrowser = (opts, fn) => {
 
         t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
                                         // codeceptjs see... methods (usually)
-        if (t.context && !t.context.I) { // after.always has no context
+        if (t.context && !t.context.I) { // Note that after.always has no context
             const I = wrap(driverCreate())
 
             await I._beforeSuite()
@@ -31,15 +32,23 @@ const execTestInBrowser = (opts, fn) => {
         // Add these methods every time because they are not context
         t.on = on.bind(t)
         t.within = within.bind(t)
-
+        t.step = step.bind(t)
 
         const { I } = t.context
         try {
 
             // Attach report data model to the context
             if (!t.context._report) {
+                const steps = extractOutline(fn.toString())
+
                 t.context._report = {
-                    startedAt: Date.now() // TODO use test start date
+                    startedAt: t._test.startedAt,
+                    outline: {
+                        steps: steps.map(stepName => ({
+                            name: stepName,
+                            success: false
+                        })) 
+                    }
                 }
             }
 

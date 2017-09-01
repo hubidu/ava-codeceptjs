@@ -4,7 +4,7 @@ const { prepareBrowser, teardownBrowser, inBrowser } = require('../index.js')
 test.beforeEach(prepareBrowser(async (t, I) => {
   await I.say('Lets prepare the test')
   await I.amOnPage('https://duckduckgo.com/')
-  await I.seeInTitle('duck')
+  await I.seeInTitle('Duck')
 }))
 
 test('running in browser it should be able to use ava hooks', 
