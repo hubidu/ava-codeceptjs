@@ -67,8 +67,10 @@ TBD
 - TODO ava test.todo - can I include these into reports
 - Add timestamp to screenshots
 
+- successful afterEach should not overshadow a failure in the test
 - Add codecept command and parameters to screenshot
 - Extract tags (@...) from test titles
+- step stacktrace should be ignored in screenshot output
 - IDEA mustSucceedAfter(date) HOF to activate tests for features which are not yet live
 - IDEA Log structured data (like json) for reports
 - IDEA Supply factory function for page objects to enable inBrowser to refresh page objects with current version of I
