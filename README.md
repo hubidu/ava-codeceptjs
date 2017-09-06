@@ -61,7 +61,15 @@ TBD
 - DONE Create a report file which can be used to create a nice, detailed test report
 - DONE Record test duration
 
-- Use I.say(...) to log steps for reports
+- DONE Use I.say(...) to log steps for reports
+- Remove beforeEach afterEach from test titles
+- BUG: Match steps with string templates correctly
+- TODO ava test.todo - can I include these into reports
+- Add timestamp to screenshots
+
+- Add codecept command and parameters to screenshot
+- Extract tags (@...) from test titles
+- IDEA mustSucceedAfter(date) HOF to activate tests for features which are not yet live
 - IDEA Log structured data (like json) for reports
 - IDEA Supply factory function for page objects to enable inBrowser to refresh page objects with current version of I
 - Replace codeceptjs file upload with a version without global variables

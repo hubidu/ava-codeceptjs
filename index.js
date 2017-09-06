@@ -29,13 +29,17 @@ const execTestInBrowser = (opts, fn) => {
             I._setTestTitle(t.title)
         }
 
-        // Add these methods every time because they are not context
+        /*
+         * Add these methods every time because they are not context
+         */
         t.on = on.bind(t)
+        t.using = on.bind(t) // alias for rest client objects
         t.within = within.bind(t)
         t.step = step.bind(t)
 
         const { I } = t.context
         try {
+            // console.log(t._test)
 
             // Attach report data model to the context
             if (!t.context._report) {
@@ -43,10 +47,11 @@ const execTestInBrowser = (opts, fn) => {
 
                 t.context._report = {
                     startedAt: t._test.startedAt,
+                    type: 'test',
                     outline: {
                         steps: steps.map(stepName => ({
                             name: stepName,
-                            success: false
+                            success: undefined
                         })) 
                     }
                 }
@@ -94,9 +99,33 @@ const inBrowser = (opts, fn) => execTestInBrowser(opts, fn)
 const prepareBrowser = fn => execTestInBrowser({ teardown: false }, fn)
 const teardownBrowser = fn => execTestInBrowser({ teardown: true }, fn)
 
+const { testFromStacktrace } = require('./lib/utils')
+
+const implementIt = () => {
+    const err = new Error()
+    const { fileName: testFileName } = testFromStacktrace(err);
+
+    return async function testMethod(t) {
+        t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
+                                        // codeceptjs see... methods (usually)
+        const I = wrap(driverCreate())
+        t.context.I = I
+        I._setTestTitle('TODO: ' + t.title)
+
+        t.context._report = {
+            startedAt: t._test.startedAt,
+            type: 'todo'
+        }
+
+        I._createOutputDirIfNecessary(testFileName)
+                                        
+        await saveReport(t, createReport(t))
+    }
+}
 
 module.exports = {
     prepareBrowser,
     teardownBrowser,
     inBrowser,
+    implementIt
 }
