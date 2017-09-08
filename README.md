@@ -67,6 +67,7 @@ TBD
 - TODO ava test.todo - can I include these into reports
 - Add timestamp to screenshots
 
+- test.after.always does not work inBrowser
 - successful afterEach should not overshadow a failure in the test
 - Add codecept command and parameters to screenshot
 - Extract tags (@...) from test titles
