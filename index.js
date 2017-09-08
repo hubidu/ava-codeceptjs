@@ -48,6 +48,7 @@ const execTestInBrowser = (opts, fn) => {
                 t.context._report = {
                     startedAt: t._test.startedAt,
                     type: 'test',
+                    testResults: [],
                     outline: {
                         steps: steps.map(stepName => ({
                             name: stepName,
@@ -66,7 +67,10 @@ const execTestInBrowser = (opts, fn) => {
             }
 
 
+            t.context._report.testResults.push(true)
         } catch (err) {
+            t.context._report.testResults.push(false)
+
             if (err instanceof AssertionError) {
                 t._test.addFailedAssertion(err)
             } else {
