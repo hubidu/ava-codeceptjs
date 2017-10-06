@@ -60,8 +60,9 @@ TBD
 - DONE Also show the 'original' stack trace (from within page object or function)
 - DONE Create a report file which can be used to create a nice, detailed test report
 - DONE Record test duration
-
 - DONE Use I.say(...) to log steps for reports
+
+- BUG saveBrowserLogs not working
 - Remove beforeEach afterEach from test titles
 - BUG: Match steps with string templates correctly
 - TODO ava test.todo - can I include these into reports

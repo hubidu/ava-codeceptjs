@@ -7,11 +7,10 @@ const { inBrowser } = require('../index.js')
 test('A successful after each hook should not overshadow a failing test', 
 inBrowser({teardown: false}, async (t, I) => {
     await I.amOnPage('https://duckduckgo.com/')
-    await I.see('DuckDuckFoo', '#logo_homepage_link')
+    await I.see('DuckDuckFoo', '#logo_homepage_link') // test is ok to fail here
 }))
 
 test.afterEach.always(
 inBrowser(async (t, I) => {
-    console.log('Executing after each')
     await I.see('DuckDuckGo', '#logo_homepage_link')
 }))

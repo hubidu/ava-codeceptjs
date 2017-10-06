@@ -85,7 +85,7 @@ const execTestInBrowser = (opts, fn) => {
                     t.context._report = Object.assign({}, t.context._report, {
                         screenshots: I._getReportData()
                     })
-                    await saveReport(t, createReport(t))
+                    await saveReport(t, await createReport(t))
                     
                     // Teardown browser instance
                     await t.context.I._after()
@@ -123,7 +123,7 @@ const implementIt = () => {
 
         I._createOutputDirIfNecessary(testFileName)
                                         
-        await saveReport(t, createReport(t))
+        await saveReport(t, await createReport(t))
     }
 }
 
