@@ -62,15 +62,14 @@ TBD
 - DONE Record test duration
 - DONE Use I.say(...) to log steps for reports
 - DONE saveBrowserLogs not working
+- DONE Implement test device settings
+- DONE Remove newlines from test titles
+- DONE Remove beforeEach afterEach from test titles
+- DONE Add timestamp to screenshots
+- DONE test.after.always does not work inBrowser
+- DONE successful afterEach should not overshadow a failure in the test
 
-- Remove newlines from test titles
-- Remove beforeEach afterEach from test titles
 - BUG: Match steps with string templates correctly
-- TODO ava test.todo - can I include these into reports
-- Add timestamp to screenshots
-
-- test.after.always does not work inBrowser
-- successful afterEach should not overshadow a failure in the test
 - Add codecept command and parameters to screenshot
 - Extract tags (@...) from test titles
 - step stacktrace should be ignored in screenshot output
