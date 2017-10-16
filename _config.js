@@ -13,7 +13,14 @@ module.exports = {
     port: PORT,
     timeouts: {
       waitForTimeout: 5000
-    }
+    },
+
+    deviceSettings: {
+      type: 'desktop',
+      width: 1900,
+      height: 2048
+    },
+    
   },
 
   iPhone: {
@@ -29,8 +36,9 @@ module.exports = {
     },
 
     deviceSettings: {
+      type: 'mobile',
       width: 360,
-      height: 3096
+      height: 2048
     },
 
     desiredCapabilities: {
