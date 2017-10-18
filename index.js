@@ -10,6 +10,8 @@ const execTestInBrowser = (opts, fn) => {
     if (typeof opts === 'function') {
         fn = opts
         opts = { teardown: true }
+    } else {
+        opts = Object.assign({ teardown: true }, opts)
     }
 
     // Return a test function which takes a test execution context
@@ -20,7 +22,7 @@ const execTestInBrowser = (opts, fn) => {
         t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
                                         // codeceptjs see... methods (usually)
         if (t.context && !t.context.I) { // Note that after.always has no context
-            const I = wrap(driverCreate())
+            const I = wrap(driverCreate(opts))
 
             await I._beforeSuite()
             await I._before()
