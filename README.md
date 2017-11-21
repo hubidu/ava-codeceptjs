@@ -1,7 +1,7 @@
 ava-codeceptjs
 ==============
 
-Concurrent, opinionated UI Testing. Using ava, codeceptjs, webdriverio and chrome. 
+Concurrent, opinionated UI Testing. Using ava, codeceptjs, webdriverio and chrome.
 
 ## Why
 
@@ -39,7 +39,7 @@ TBD
 - DONE cleanup error screenshots before each test run
 - DONE Code excerpt broken on codeceptjs exceptions
 - DONE In error screenshots: Show a grid of all boxes
-    * { 
+    * {
       border: 1px solid rgba(0, 0, 0, 0.3);
     }
 - DONE Try ava snapshot feature
@@ -68,8 +68,8 @@ TBD
 - DONE Add timestamp to screenshots
 - DONE test.after.always does not work inBrowser
 - DONE successful afterEach should not overshadow a failure in the test
-
 - BUG: Match steps with string templates correctly
+
 - Add codecept command and parameters to screenshot
 - Extract tags (@...) from test titles
 - step stacktrace should be ignored in screenshot output
