@@ -1,7 +1,10 @@
 const { AssertionError } = require('ava/lib/assert')
 
 const { wrap } = require('./lib/wrap-methods')
-const driverCreate = require('./lib/driver')
+
+const createWebDriver = require('./lib/create-web-driver')
+const createAppiumDriver = require('./lib/create-appium')
+
 const { createReport, saveReport } = require('./lib/reporter')
 const { on, within, step } = require('./lib/context-methods')
 const { extractOutline } = require('./lib/extract-outline')
@@ -14,6 +17,8 @@ const execTestInBrowser = (opts, fn) => {
         opts = Object.assign({ teardown: true }, opts)
     }
 
+    const driverCreateFn = opts.driverCreateFn || createWebDriver
+
     // Return a test function which takes a test execution context
     return async t => {
         // Never teardown in before hook
@@ -22,7 +27,7 @@ const execTestInBrowser = (opts, fn) => {
         t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
                                         // codeceptjs see... methods (usually)
         if (t.context && !t.context.I) { // Note that after.always has no context
-            const I = wrap(driverCreate(opts))
+            const I = wrap(driverCreateFn(opts))
 
             await I._beforeSuite()
             await I._before()
@@ -55,7 +60,7 @@ const execTestInBrowser = (opts, fn) => {
                         steps: steps.map(stepName => ({
                             name: stepName,
                             success: undefined
-                        })) 
+                        }))
                     }
                 }
             }
@@ -88,7 +93,7 @@ const execTestInBrowser = (opts, fn) => {
                         screenshots: I._getReportData()
                     })
                     await saveReport(t, await createReport(t))
-                    
+
                     // Teardown browser instance
                     await t.context.I._after()
                     await t.context.I._afterSuite()
@@ -101,7 +106,14 @@ const execTestInBrowser = (opts, fn) => {
     }
 }
 
-const inBrowser = (opts, fn) => execTestInBrowser(opts, fn)
+const inBrowser = (opts, fn) => {
+  opts.driverCreateFn = createWebDriver
+  return execTestInBrowser(opts, fn)
+}
+const inApp = (opts, fn) => {
+  opts.driverCreateFn = createAppiumDriver
+  return execTestInBrowser(opts, fn)
+}
 const prepareBrowser = fn => execTestInBrowser({ teardown: false }, fn)
 const teardownBrowser = fn => execTestInBrowser({ teardown: true }, fn)
 
@@ -124,7 +136,7 @@ const implementIt = () => {
         }
 
         I._createOutputDirIfNecessary(testFileName)
-                                        
+
         await saveReport(t, await createReport(t))
     }
 }
@@ -132,6 +144,7 @@ const implementIt = () => {
 module.exports = {
     prepareBrowser,
     teardownBrowser,
+    inApp,
     inBrowser,
     implementIt
 }
