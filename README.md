@@ -32,50 +32,16 @@ TBD
 
 ## Backlog
 
-- DONE Auto-Wait for elements automatically on 'click'
-- DONE Create valid error screenshot file names
-- DONE Save error screenshot to output directory
-- DONE Save debug screenshots automatically after each step
-- DONE cleanup error screenshots before each test run
-- DONE Code excerpt broken on codeceptjs exceptions
-- DONE In error screenshots: Show a grid of all boxes
-    * {
-      border: 1px solid rgba(0, 0, 0, 0.3);
-    }
-- DONE Try ava snapshot feature
-- DONE Try ava failing test feature
-- DONE Try chrome headless
-- DONE Mark failed area on page
-- DONE Use test name (and path) when creating output directory for screenshots
-- DONE 'within' might fail, because I need to wait for context object to become visible first
-- DONE Refactor check24 tests into separate files (ava concurrency is file concurrency)
-- DONE t.on should return new page object instance
-- DONE Refactor ava-codecept code
-- DONE Move examples to separate project
-- DONE NEED IDEA How to run same test case on/for multiple devices
-- DONE Still problems with ava --watch and removing directories (seems to be a windows problem)
-- DONE Store screenshot with stacktrace in report
-- DONE Display page title (and url) in the error screenshot
-- DONE Save browser logs to disk on error
-- DONE Also show the 'original' stack trace (from within page object or function)
-- DONE Create a report file which can be used to create a nice, detailed test report
-- DONE Record test duration
-- DONE Use I.say(...) to log steps for reports
-- DONE saveBrowserLogs not working
-- DONE Implement test device settings
-- DONE Remove newlines from test titles
-- DONE Remove beforeEach afterEach from test titles
-- DONE Add timestamp to screenshots
-- DONE test.after.always does not work inBrowser
-- DONE successful afterEach should not overshadow a failure in the test
-- BUG: Match steps with string templates correctly
-
 - Add codecept command and parameters to screenshot
+- Store source code together with error screenshot
+- Using say could use t.log
 - Extract tags (@...) from test titles
 - step stacktrace should be ignored in screenshot output
+- IDEA highlight clickable elements on taking error screenshots
 - IDEA mustSucceedAfter(date) HOF to activate tests for features which are not yet live
 - IDEA Log structured data (like json) for reports
 - IDEA Supply factory function for page objects to enable inBrowser to refresh page objects with current version of I
+- IDEA screenshot gallery of pages
 - Replace codeceptjs file upload with a version without global variables
 - Improve element highlighting: dont change highlighted element and if element can not be found add command to top of page
 - Add logs to report.json
