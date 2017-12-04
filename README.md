@@ -32,6 +32,7 @@ TBD
 
 ## Backlog
 
+- Check default waitForTimeout
 - Add codecept command and parameters to screenshot
 - Store source code together with error screenshot
 - Using say could use t.log
