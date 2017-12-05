@@ -1,3 +1,4 @@
+const debug = require('debug')('ava-codeceptjs')
 const { AssertionError } = require('ava/lib/assert')
 
 const { wrap } = require('./lib/wrap-methods')
@@ -21,8 +22,8 @@ const execTestInBrowser = (opts, fn) => {
 
     // Return a test function which takes a test execution context
     return async t => {
-        // Never teardown in before hook
-        if (t._test.metadata.type.indexOf('before') === 0) opts.teardown = false
+        // Should be callers choice. There are use cases where you need control
+        // if (t._test.metadata.type.indexOf('before') === 0) opts.teardown = false
 
         t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
                                         // codeceptjs see... methods (usually)
@@ -44,9 +45,8 @@ const execTestInBrowser = (opts, fn) => {
         t.within = within.bind(t)
         t.step = step.bind(t)
 
-        const { I } = t.context
+        const { I } = t.context // NOTE there is no context in before either
         try {
-            // console.log(t._test)
 
             // Attach report data model to the context
             if (!t.context._report) {
@@ -88,11 +88,16 @@ const execTestInBrowser = (opts, fn) => {
         } finally {
             if (t.context.I) {
                 if (opts.teardown) {
+                    debug('Tearing down webdriver instance')
                     // Save report file
                     t.context._report = Object.assign({}, t.context._report, {
                         screenshots: I._getReportData()
                     })
-                    await saveReport(t, await createReport(t))
+                    try {
+                      await saveReport(t, await createReport(t))
+                    } catch (err) {
+                      console.log('ERROR Failed to save report', err)
+                    }
 
                     // Teardown browser instance
                     await t.context.I._after()
