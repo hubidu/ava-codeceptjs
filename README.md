@@ -32,7 +32,7 @@ TBD
 
 ## Backlog
 
-- Check default waitForTimeout
+- Web: Autowait should not happen on first parameter of click (only when there are two parameters and the first is a selector)
 - Add codecept command and parameters to screenshot
 - Store source code together with error screenshot
 - Using say could use t.log
