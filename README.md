@@ -35,9 +35,9 @@ TBD
 - DONE Web: Autowait should not happen on first parameter of click (only when there are two parameters and the first is a selector)
 - DONE Store source code together with error screenshot
 - DONE Web: Element highlighting is broken
-- BUG Web: No console logs available
-- Web: Time ajax requests
+- DONE Web: No console logs available
 - Android: Add current activity as a replacement for page title
+- Web: Time ajax requests
 - Add codecept command and parameters to screenshot
 - Using say could use t.log
 - Extract tags (@...) from test titles
