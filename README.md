@@ -34,7 +34,7 @@ TBD
 
 - DONE Web: Autowait should not happen on first parameter of click (only when there are two parameters and the first is a selector)
 - DONE Store source code together with error screenshot
-- BUG Web: Element highlighting is broken
+- DONE Web: Element highlighting is broken
 - BUG Web: No console logs available
 - Web: Time ajax requests
 - Android: Add current activity as a replacement for page title
