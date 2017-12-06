@@ -32,9 +32,13 @@ TBD
 
 ## Backlog
 
-- Web: Autowait should not happen on first parameter of click (only when there are two parameters and the first is a selector)
+- DONE Web: Autowait should not happen on first parameter of click (only when there are two parameters and the first is a selector)
+- DONE Store source code together with error screenshot
+- BUG Web: Element highlighting is broken
+- BUG Web: No console logs available
+- Web: Time ajax requests
+- Android: Add current activity as a replacement for page title
 - Add codecept command and parameters to screenshot
-- Store source code together with error screenshot
 - Using say could use t.log
 - Extract tags (@...) from test titles
 - step stacktrace should be ignored in screenshot output
