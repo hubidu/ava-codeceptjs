@@ -36,7 +36,7 @@ TBD
 - DONE Store source code together with error screenshot
 - DONE Web: Element highlighting is broken
 - DONE Web: No console logs available
-- Android: Add current activity as a replacement for page title
+cd- Android: Add current activity as a replacement for page title
 - Web: Time ajax requests
 - Add codecept command and parameters to screenshot
 - Using say could use t.log
