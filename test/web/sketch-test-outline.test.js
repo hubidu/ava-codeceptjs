@@ -1,7 +1,7 @@
 const { test } = require('ava')
-const { inBrowser } = require('../index.js')
+const { inBrowser } = require('../../index.js')
 
-test(`sketch a test outline using t.step`, 
+test(`sketch a test outline using t.step`,
 inBrowser(async ({step}, I) => {
     const url = 'https://duckduckgo.com/'
     step  (`I go to the duckduckgo (${url}) page`)

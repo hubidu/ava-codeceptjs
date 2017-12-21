@@ -1,5 +1,5 @@
 const { test } = require('ava')
-const { inBrowser } = require('../index.js')
+const { inBrowser } = require('../../index.js')
 
 const createDuckDuckGoPage = I => {
   return new class DuckDuckGoPage {
@@ -17,7 +17,7 @@ const createDuckDuckGoPage = I => {
   }
 }
 
-test('running in browser should be able to use page objects', 
+test('running in browser should be able to use page objects',
 inBrowser(async (t, I) => {
   const DuckDuckGoPage = createDuckDuckGoPage(I)
 
@@ -27,7 +27,7 @@ inBrowser(async (t, I) => {
   })
 }))
 
-test('running in browser errors in page objects should produce code excerpt, stacktrace of actual failed location and error screenshot', 
+test('running in browser errors in page objects should produce code excerpt, stacktrace of actual failed location and error screenshot',
 inBrowser(async (t, I) => {
   const DuckDuckGoPage = createDuckDuckGoPage(I)
 

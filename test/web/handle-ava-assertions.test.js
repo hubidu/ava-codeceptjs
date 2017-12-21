@@ -1,5 +1,5 @@
 const { test } = require('ava')
-const { inBrowser } = require('../index.js')
+const { inBrowser } = require('../../index.js')
 
 test.failing('run in browser and when encountering an ava assertion take a screenshot', inBrowser(async (t, I) => {
   await I.amOnPage('https://duckduckgo.com/')

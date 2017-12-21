@@ -1,5 +1,5 @@
 const { test } = require('ava')
-const { inBrowser } = require('../index.js')
+const { inBrowser } = require('../../index.js')
 
 test('run in browser without error and make screenshots on I.see methods', inBrowser(async (t, I) => {
   await I.amOnPage('https://duckduckgo.com/')

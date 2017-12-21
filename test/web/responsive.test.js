@@ -1,5 +1,5 @@
 const { test } = require('ava')
-const { inBrowser } = require('../index.js')
+const { inBrowser } = require('../../index.js')
 
 const Devices = [
   { id: 'mobile', resolution: ['380', '1000'] },

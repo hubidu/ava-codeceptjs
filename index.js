@@ -124,32 +124,9 @@ const teardownBrowser = fn => execTestInBrowser({ teardown: true }, fn)
 
 const { testFromStacktrace } = require('./lib/utils')
 
-const implementIt = () => {
-    const err = new Error()
-    const { fileName: testFileName } = testFromStacktrace(err);
-
-    return async function testMethod(t) {
-        t._test.failWithoutAssertions = false // Don't fail without assertion since we are using
-                                        // codeceptjs see... methods (usually)
-        const I = wrap(driverCreate())
-        t.context.I = I
-        I._setTestTitle('TODO: ' + t.title)
-
-        t.context._report = {
-            startedAt: t._test.startedAt,
-            type: 'todo'
-        }
-
-        I._createOutputDirIfNecessary(testFileName)
-
-        await saveReport(t, await createReport(t))
-    }
-}
-
 module.exports = {
     prepareBrowser,
     teardownBrowser,
     inApp,
-    inBrowser,
-    implementIt
+    inBrowser
 }
