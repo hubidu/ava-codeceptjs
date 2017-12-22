@@ -97,13 +97,14 @@ const execTestInBrowser = (opts, fn) => {
                       await saveReport(t, await createReport(t))
                     } catch (err) {
                       console.log('ERROR Failed to save report', err)
+                      throw new Error(`Failed to save report - ${err.message}`)
+                    } finally {
+                      // Teardown browser instance
+                      await t.context.I._after()
+                      await t.context.I._afterSuite()
+
+                      t.context.I = undefined
                     }
-
-                    // Teardown browser instance
-                    await t.context.I._after()
-                    await t.context.I._afterSuite()
-
-                    t.context.I = undefined
                 }
             }
         }
