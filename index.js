@@ -45,7 +45,6 @@ const execTestInBrowser = (opts, fn) => {
         t.within = within.bind(t)
         t.step = step.bind(t)
 
-        let forceExit = false
         const { I } = t.context // NOTE there is no context in before either
         try {
 
@@ -82,10 +81,6 @@ const execTestInBrowser = (opts, fn) => {
             if (err instanceof AssertionError) {
                 t._test.addFailedAssertion(err)
             } else {
-                if (err.type && err.type === 'ESOCKETTIMEDOUT') {
-                  console.log('Exiting due to socket timeout', err)
-                  forceExit = true
-                }
                 // TODO Could create an ava error for that too?
                 t._test.addFailedAssertion(err)
                 throw err
@@ -110,9 +105,8 @@ const execTestInBrowser = (opts, fn) => {
 
                       t.context.I = undefined
 
-                      if (forceExit) {
-                        process.exit(1)
-                      }
+                      // Try wait to prevent chromedriver freeze
+                      await new Promise((resolve, reject) => setTimeout(resolve, 2000))
                     }
                 }
             }
