@@ -14,12 +14,12 @@
   "dependencies": {
     "archiver": "^2.1.0",
     "code-excerpt": "^2.0.0",
-    "codeceptjs": "^1.1.5",
+    "codeceptjs": "^1.1.6",
     "debug": "^3.1.0",
     "error-stack-parser": "^2.0.1",
     "mkdirp": "^0.5.1",
     "request": "^2.83.0",
-    "webdriverio": "^4.10.2"
+    "webdriverio": "^4.12.0"
   },
   "devDependencies": {
     "ava": "^0.25.0"
