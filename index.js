@@ -68,12 +68,6 @@ const execTestInBrowser = (opts, fn) => {
             // Execute the test or hook function
             await fn(t, t.context.I)
 
-            if (t._test.assertCount > 0) {
-                // TODO Fail the test
-                // TODO Better: wrap ava' t.is, t.deepEqual etc and throw on first fail
-            }
-
-
             t.context._report.testResults.push(true)
         } catch (err) {
             t.context._report.testResults.push(false)
@@ -115,22 +109,28 @@ const execTestInBrowser = (opts, fn) => {
     }
 }
 
+const confirmTestFailure = fn => {
+  return async t => {
+    await fn(t)
+
+    if (t._test.assertError) {
+      console.log(`WARNING An assertion in test '${t._test.title}' failed -> retrying...`)
+      await fn(t)
+    }
+  }
+}
+
 const inBrowser = (opts, fn) => {
   opts.driverCreateFn = createWebDriver
-  return execTestInBrowser(opts, fn)
+  return confirmTestFailure(execTestInBrowser(opts, fn))
 }
 const inApp = (opts, fn) => {
   opts.driverCreateFn = createAppiumDriver
   return execTestInBrowser(opts, fn)
 }
-const prepareBrowser = fn => execTestInBrowser({ teardown: false }, fn)
-const teardownBrowser = fn => execTestInBrowser({ teardown: true }, fn)
-
 const { testFromStacktrace } = require('./lib/utils')
 
 module.exports = {
-    prepareBrowser,
-    teardownBrowser,
     inApp,
     inBrowser
 }
