@@ -114,7 +114,12 @@ const confirmTestFailure = fn => {
     await fn(t)
 
     if (t._test.assertError) {
-      console.log(`WARNING An assertion in test '${t._test.title}' failed -> retrying...`)
+      console.log(`WARNING Test '${t._test.title}' failed. Now trying to confirm the error...`)
+
+      // Reset test state
+      t._test.assertError = undefined
+      t.context._report = undefined
+
       await fn(t)
     }
   }
