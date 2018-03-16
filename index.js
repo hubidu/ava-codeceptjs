@@ -109,6 +109,11 @@ const execTestInBrowser = (opts, fn) => {
     }
 }
 
+/**
+ * Run test again if it failed with an assertion
+ * in order to confirm the failure
+ * @param {*} fn
+ */
 const confirmTestFailure = fn => {
   return async t => {
     await fn(t)
@@ -127,10 +132,16 @@ const confirmTestFailure = fn => {
 
 const inBrowser = (opts, fn) => {
   opts.driverCreateFn = createWebDriver
-  return confirmTestFailure(execTestInBrowser(opts, fn))
+
+  if (process.env.TEST_RETRY) {
+    return confirmTestFailure(execTestInBrowser(opts, fn))
+  }
+
+  return execTestInBrowser(opts, fn)
 }
 const inApp = (opts, fn) => {
   opts.driverCreateFn = createAppiumDriver
+  // TODO Add retry
   return execTestInBrowser(opts, fn)
 }
 const { testFromStacktrace } = require('./lib/utils')
