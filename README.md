@@ -34,6 +34,7 @@ TBD
 ## Backlog
 
 - Make report dir configurable
+- Rerun failed tests first, then the rest
 - Add codecept command and parameters to screenshot
 - IDEA Confirm a test failure by immediately retrying the test
 - IDEA screenshot gallery of pages: Add a screenshot to the gallery
