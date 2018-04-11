@@ -1,6 +1,6 @@
 {
   "name": "ava-codeceptjs",
-  "version": "2.13.2",
+  "version": "2.13.3",
   "description": "Concurrent UI testing with ava, codeceptjs, webdriverio and chrome headless",
   "main": "index.js",
   "author": {

@@ -1,0 +1,19 @@
+## Backlog
+
+- Add codecept command and parameters to screenshot
+- IDEA screenshot gallery of pages: Add a screenshot to the gallery
+- IDEA Time ajax requests
+- Using say could use t.log
+- Extract tags (@...) from test titles
+- step stacktrace should be ignored in screenshot output
+- IDEA highlight all clickable elements in error screenshots for better trouble shooting
+- IDEA Log structured data (like json) for reports
+- Replace codeceptjs file upload with a version without global variables
+- Remove from stacktraces: at WebDriverIO.wrapped [as see] (C:\\Users\\stefan.huber\\projects\\server-cons
+- Can I find out if an element is still being animated (to avoid situations like "Element <svg width="30" height="30">...</svg> is not clickable at point (46, 503). Other element would receive the click: <div class="OnboardingBanner">...</div>")
+- Improve element highlighting in screenshots
+- Need a cool full-text search to find tests efficiently
+- Also save screenshots on failed ava assertions
+- Map codeceptjs assertion errors to ava assertion error
+- Suppport webdriverio errors
+- Better when in headless mode: Would be nice if chrome would not steal the focus
