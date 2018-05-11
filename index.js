@@ -6,7 +6,7 @@ const { wrap } = require('./lib/wrap-methods')
 const createWebDriver = require('./lib/create-web-driver')
 const createAppiumDriver = require('./lib/create-appium')
 
-const { createReport, saveReport } = require('./lib/reporter')
+const { createReport, saveReport, uploadReport } = require('./lib/reporter')
 const { on, within, step } = require('./lib/context-methods')
 const { extractOutline } = require('./lib/extract-outline')
 
@@ -89,6 +89,7 @@ const execTestInBrowser = (opts, fn) => {
                     })
                     try {
                       await saveReport(t, await createReport(t))
+                      await uploadReport(t)
                     } catch (err) {
                       console.log('ERROR Failed to save report', err)
                       throw new Error(`Failed to save report - ${err.message}`)

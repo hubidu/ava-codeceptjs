@@ -1,5 +1,6 @@
 ## Backlog
 
+- Correct step stacktrace
 - Improve codeceptjs errors: for see(text, element): error message should also contain the actual text of the element. So enhance "expected element #logo_homepage_link to include "DuckDuckFoo"" should also contain but found "About DuckDuckGo"
 - Add codecept command and parameters to screenshot
 - IDEA screenshot gallery of pages: Add a screenshot to the gallery

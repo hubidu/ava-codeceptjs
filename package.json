@@ -12,13 +12,13 @@
     "node": ">=8"
   },
   "dependencies": {
-    "archiver": "^2.1.0",
-    "code-excerpt": "^2.0.0",
-    "codeceptjs": "^1.1.7",
+    "archiver": "^2.1.1",
+    "code-excerpt": "^2.1.1",
+    "codeceptjs": "^1.1.8",
     "debug": "^3.1.0",
     "error-stack-parser": "^2.0.1",
     "mkdirp": "^0.5.1",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "webdriverio": "^4.12.0"
   },
   "devDependencies": {
