@@ -1,7 +1,7 @@
 {
   "name": "ava-codeceptjs",
-  "version": "2.13.5",
-  "description": "Concurrent UI testing with ava, codeceptjs, webdriverio and chrome headless",
+  "version": "2.14.0",
+  "description": "Awesome UI testing with ava, codeceptjs, webdriverio and chrome",
   "main": "index.js",
   "author": {
     "name": "Stefan Huber",
