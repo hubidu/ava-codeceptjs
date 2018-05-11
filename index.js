@@ -88,8 +88,11 @@ const execTestInBrowser = (opts, fn) => {
                         screenshots: I._getReportData()
                     })
                     try {
-                      await saveReport(t, await createReport(t))
-                      await uploadReport(t)
+                      const report = await createReport(t)
+                      if (report.logs.length > 0) t.log(`Test has ${report.logs.length} browser log entries`)
+
+                      await saveReport(t, report)
+                      uploadReport(t) // Don't wait
                     } catch (err) {
                       console.log('ERROR Failed to save report', err)
                       throw new Error(`Failed to save report - ${err.message}`)
