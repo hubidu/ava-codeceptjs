@@ -1,5 +1,5 @@
 const debug = require('debug')('ava-codeceptjs')
-const { AssertionError } = require('ava/lib/assert')
+const { AssertionError: AVAAssertionError } = require('ava/lib/assert')
 
 const { wrap } = require('./lib/wrap-methods')
 
@@ -72,7 +72,7 @@ const execTestInBrowser = (opts, fn) => {
         } catch (err) {
             t.context._report.testResults.push(false)
 
-            if (err instanceof AssertionError) {
+            if (err instanceof AVAAssertionError) {
                 t._test.addFailedAssertion(err)
             } else {
                 // TODO Could create an ava error for that too?
