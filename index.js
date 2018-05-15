@@ -127,7 +127,8 @@ const confirmTestFailure = fn => {
 
       // Reset test state
       t._test.assertError = undefined
-      t.context._report = undefined
+      t._test.startedAt = Date.now()
+      t.context = {}
 
       await fn(t)
     }
