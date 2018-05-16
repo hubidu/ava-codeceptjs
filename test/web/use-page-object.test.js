@@ -17,7 +17,7 @@ const createDuckDuckGoPage = I => {
   }
 }
 
-test('running in browser should be able to use page objects',
+test('it should be able to encapsulate a page interface through page objects',
 inBrowser(async (t, I) => {
   const DuckDuckGoPage = createDuckDuckGoPage(I)
 
