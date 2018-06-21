@@ -1,6 +1,6 @@
 {
   "name": "ava-codeceptjs",
-  "version": "2.14.12",
+  "version": "2.14.13",
   "description": "Awesome UI testing with ava, codeceptjs, webdriverio and chrome",
   "main": "index.js",
   "author": {
@@ -16,14 +16,14 @@
   },
   "dependencies": {
     "archiver": "^2.1.1",
-    "bifrost-io": "^0.3.1",
+    "bifrost-io": "^0.3.8",
     "code-excerpt": "^2.1.1",
-    "codeceptjs": "^1.1.8",
+    "codeceptjs": "^1.2.1",
     "debug": "^3.1.0",
     "error-stack-parser": "^2.0.1",
     "mkdirp": "^0.5.1",
     "request": "^2.85.0",
-    "webdriverio": "^4.12.0"
+    "webdriverio": "^4.13.0"
   },
   "devDependencies": {
     "ava": "^0.25.0"
