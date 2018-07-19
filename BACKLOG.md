@@ -1,9 +1,18 @@
+## Done
+
+- Report source code
+
+## Doing
+
+- Standard assertion thrown in the test must create a screenshot (success=false)
+- Extract tags from test title
+
 ## Backlog
 
+- Autowait before click: Use waitForEnabled instead of waitForVisible
 - Get consistent stacktraces: Seems that stacktraces are quite arbitrary, sometimes including the test file, sometimes not
 - Improve codeceptjs errors: for see(text, element): error message should also contain the actual text of the element. So enhance "expected element #logo_homepage_link to include "DuckDuckFoo"" should also contain but found "About DuckDuckGo"
 - IDEA screenshot gallery of pages: Add a screenshot to the gallery
-- IDEA Time ajax requests
 - Using say could use t.log
 - Extract tags (@...) from test titles
 - step stacktrace should be ignored in screenshot output

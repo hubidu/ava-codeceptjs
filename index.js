@@ -10,6 +10,8 @@ const { createReport, saveReport, uploadReport } = require('./lib/reporter')
 const { on, within, step } = require('./lib/context-methods')
 const { extractOutline } = require('./lib/extract-outline')
 
+const { fileToStringSync } = require('./lib/utils/file-to-string')
+
 const execTestInBrowser = (opts, fn) => {
     if (typeof opts === 'function') {
         fn = opts
@@ -19,6 +21,7 @@ const execTestInBrowser = (opts, fn) => {
     }
 
     const driverCreateFn = opts.driverCreateFn || createWebDriver
+    const testSource = fn.toString()
 
     // Return a test function which takes a test execution context
     return async t => {
@@ -50,7 +53,7 @@ const execTestInBrowser = (opts, fn) => {
 
             // Attach report data model to the context
             if (!t.context._report) {
-                const steps = extractOutline(fn.toString())
+                const steps = extractOutline(testSource)
 
                 t.context._report = {
                     startedAt: t._test.startedAt,
@@ -91,7 +94,9 @@ const execTestInBrowser = (opts, fn) => {
                       const report = await createReport(t)
                       if (report.logs.length > 0) t.log(`Test has ${report.logs.length} browser log entries`)
 
-                      await saveReport(t, report)
+                      // TODO Store test source code
+
+                      await saveReport(t, report, fileToStringSync(I._test.fileName))
                       uploadReport(t) // Don't wait
                     } catch (err) {
                       console.log('ERROR Failed to save report', err)
@@ -104,7 +109,7 @@ const execTestInBrowser = (opts, fn) => {
                       t.context.I = undefined
 
                       // Try wait to prevent chromedriver freeze
-                      await new Promise((resolve, reject) => setTimeout(resolve, 2000))
+                      await new Promise((resolve, _) => setTimeout(resolve, 2000))
                     }
                 }
             }
