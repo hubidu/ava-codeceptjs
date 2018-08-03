@@ -1,5 +1,7 @@
 const debug = require('debug')('ava-codeceptjs')
 const { AssertionError: AVAAssertionError } = require('ava/lib/assert')
+const { extractBaseUrl, makeUrlsAbsolute } = require('bifrost-io/src/utils')
+
 
 const { wrap } = require('./lib/wrap-methods')
 
@@ -94,10 +96,15 @@ const execTestInBrowser = (opts, fn) => {
                       const report = await createReport(t)
                       if (report.logs.length > 0) t.log(`Test has ${report.logs.length} browser log entries`)
 
-                      // TODO Store test source code
+                      // Store test source code
+                      const fullTestSource = fileToStringSync(I._test.fileName)
+                      const [pageSource, pageUrl] = await Promise.all([
+                        I.browser.getSource(), I.browser.getUrl()
+                      ])
+                      const snapshotHtml = makeUrlsAbsolute(pageSource, extractBaseUrl(pageUrl))
 
-                      await saveReport(t, report, fileToStringSync(I._test.fileName))
-                      uploadReport(t) // Don't wait
+                      await saveReport(t, report, fullTestSource, snapshotHtml)
+                      uploadReport(t) // Don't wait do it in the background
                     } catch (err) {
                       console.log('ERROR Failed to save report', err)
                       throw new Error(`Failed to save report - ${err.message}`)
