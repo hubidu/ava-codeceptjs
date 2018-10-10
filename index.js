@@ -2,7 +2,6 @@ const debug = require('debug')('ava-codeceptjs')
 const { AssertionError: AVAAssertionError } = require('ava/lib/assert')
 const { extractBaseUrl, makeUrlsAbsolute } = require('bifrost-io/src/utils')
 
-
 const { wrap } = require('./lib/wrap-methods')
 
 const createWebDriver = require('./lib/create-web-driver')
@@ -10,8 +9,8 @@ const createAppiumDriver = require('./lib/create-appium')
 
 const { createReport, saveReport, uploadReport } = require('./lib/reporter')
 const { on, within, step } = require('./lib/context-methods')
-const { extractOutline } = require('./lib/extract-outline')
 
+const { extractStepOutlineFromSource } = require('./lib/utils/extract-step-outline-from-source')
 const { fileToStringSync } = require('./lib/utils/file-to-string')
 
 const execTestInBrowser = (opts, fn) => {
@@ -55,18 +54,10 @@ const execTestInBrowser = (opts, fn) => {
 
             // Attach report data model to the context
             if (!t.context._report) {
-                const steps = extractOutline(testSource)
-
                 t.context._report = {
                     startedAt: t._test.startedAt,
                     type: 'test',
                     testResults: [],
-                    outline: {
-                        steps: steps.map(stepName => ({
-                            name: stepName,
-                            success: undefined
-                        }))
-                    }
                 }
             }
 
@@ -96,13 +87,14 @@ const execTestInBrowser = (opts, fn) => {
                       const report = await createReport(t)
                       if (report.logs.length > 0) t.log(`Test has ${report.logs.length} browser log entries`)
 
-                      // Store test source code
+                      // Store full test source (whole file)
                       const fullTestSource = fileToStringSync(I._test.fileName)
                       const [pageSource, pageUrl] = await Promise.all([
                         I.browser.getSource(), I.browser.getUrl()
                       ])
                       const snapshotHtml = makeUrlsAbsolute(pageSource, extractBaseUrl(pageUrl))
 
+                      report.steps = extractStepOutlineFromSource(fullTestSource, testSource)
                       await saveReport(t, report, fullTestSource, snapshotHtml)
                       uploadReport(t) // Don't wait do it in the background
                     } catch (err) {

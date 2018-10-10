@@ -27,7 +27,7 @@ inBrowser(async (t, I) => {
   })
 }))
 
-test('running in browser errors in page objects should produce code excerpt, stacktrace of actual failed location and error screenshot',
+test('running in browser errors in page objects should produce code excerpt, stacktrace of actual failed location and error screenshot @failing',
 inBrowser(async (t, I) => {
   const DuckDuckGoPage = createDuckDuckGoPage(I)
 

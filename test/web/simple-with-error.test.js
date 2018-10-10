@@ -2,20 +2,20 @@ const assert = require('assert')
 const { test } = require('ava')
 const { inBrowser } = require('../../index.js')
 
-test.failing('it should go to duckduckgo and look for a text in an element which whill be different (therefore it will fail)',
+test.failing('it should go to duckduckgo and look for a text in an element which whill be different (therefore it will fail) @failing',
 inBrowser(async (t, I) => {
   await I.amOnPage('https://duckduckgo.com/')
   await I.see('DuckDuckFoo', '#logo_homepage_link')
 }))
 
-test.failing('it should also fail when a standard assertion is thrown directly in the test',
+test.failing('it should also fail when a standard assertion is thrown directly in the test @failing',
 inBrowser(async (t, I) => {
   await I.amOnPage('https://duckduckgo.com/')
   assert.equal('foo', 'bar') // This will create a nodejs AssertionError
   // TODO Currently this will not generate an error screenshot or source code snippet
 }))
 
-test.failing('it should fail when a standard assertion error is thrown in a page object',
+test.failing('it should fail when a standard assertion error is thrown in a page object @failing',
 inBrowser(async ({on}, I) => {
   class SamplePage {
     async willTriggerAnAssertion() {
@@ -27,6 +27,5 @@ inBrowser(async ({on}, I) => {
   await on(SamplePage, async I => {
     await I.willTriggerAnAssertion()
   })
-
 }))
 

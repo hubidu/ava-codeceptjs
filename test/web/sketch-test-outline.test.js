@@ -4,7 +4,7 @@ const { inBrowser } = require('../../index.js')
 test(`sketch a test outline using t.step`,
 inBrowser(async ({step}, I) => {
     const url = 'https://duckduckgo.com/'
-    step  (`I go to the duckduckgo (${url}) page`)
+    step  (`I go to the duckduckgo page`)
     await I.amOnPage(url)
     await I.see('DuckDuckGo', '#logo_homepage_link')
 
@@ -13,5 +13,5 @@ inBrowser(async ({step}, I) => {
     await I.click('#search_button_homepage')
 
     step('I see avajs/ava as first result in search results')
-    await I.see('GitHub - avajs/ava: Futuristic JavaScript test runner', 'h2.result__title')
+    await I.see('Futuristic JavaScript test runner', 'h2.result__title')
 }))

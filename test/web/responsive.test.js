@@ -14,7 +14,7 @@ for (let device of Devices) {
     await I.see('DuckDuckGo', '#logo_homepage_link')
     await I.fillField('#search_form_input_homepage', 'github ava')
     await I.click('#search_button_homepage')
-    await I.see('GitHub - avajs/ava: Futuristic JavaScript test runner', 'h2.result__title')
+    await I.see('Futuristic JavaScript test runner', 'h2.result__title')
   }))
 }
 
