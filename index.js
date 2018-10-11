@@ -5,7 +5,6 @@ const { extractBaseUrl, makeUrlsAbsolute } = require('bifrost-io/src/utils')
 const { wrap } = require('./lib/wrap-methods')
 
 const createWebDriver = require('./lib/create-web-driver')
-const createAppiumDriver = require('./lib/create-appium')
 
 const { createReport, saveReport, uploadReport } = require('./lib/reporter')
 const { on, within, step } = require('./lib/context-methods')
@@ -146,11 +145,6 @@ const inBrowser = (opts, fn) => {
     return confirmTestFailure(execTestInBrowser(opts, fn))
   }
 
-  return execTestInBrowser(opts, fn)
-}
-const inApp = (opts, fn) => {
-  opts.driverCreateFn = createAppiumDriver
-  // TODO Add retry
   return execTestInBrowser(opts, fn)
 }
 const { testFromStacktrace } = require('./lib/utils')
