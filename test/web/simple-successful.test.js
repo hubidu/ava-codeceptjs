@@ -2,6 +2,13 @@ const { test } = require('ava')
 const { inBrowser } = require('../../index.js')
 
 test('it should search for ava-codeceptjs on duckduckgo and verify the result', inBrowser(async ({step}, I) => {
+  const newData = {
+    street: 'Altostr.',
+    houseNumber: '12a',
+    areaCode: '81245',
+    city: 'München',
+  }
+
   step  (`I go to the duckduckgo page`)
   await I.amOnPage('https://duckduckgo.com/')
   await I.see('DuckDuckGo', '#logo_homepage_link')

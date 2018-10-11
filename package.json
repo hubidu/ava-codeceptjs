@@ -1,6 +1,6 @@
 {
   "name": "ava-codeceptjs",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "Awesome UI testing with ava, codeceptjs, webdriverio and chrome",
   "main": "index.js",
   "author": {
@@ -16,8 +16,11 @@
   },
   "dependencies": {
     "@ava/babel-preset-stage-4": "^2.0.0",
+    "@ava/babel-preset-transform-test-files": "^4.0.0",
     "@babel/core": "^7.1.2",
+    "@babel/plugin-transform-property-literals": "^7.0.0",
     "archiver": "^3.0.0",
+    "babel-plugin-transform-property-literals": "^6.9.4",
     "bifrost-io": "^0.6.3",
     "code-excerpt": "^2.1.1",
     "codeceptjs": "^1.4.3",

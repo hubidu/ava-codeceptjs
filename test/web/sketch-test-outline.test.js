@@ -3,7 +3,7 @@ const { inBrowser } = require('../../index.js')
 
 test(`sketch a test outline using t.step`,
 inBrowser(async ({step}, I) => {
-    const url = 'https://duckduckgo.com/'
+  const url = 'https://duckduckgo.com/'
     step  (`I go to the duckduckgo page`)
     await I.amOnPage(url)
     await I.see('DuckDuckGo', '#logo_homepage_link')
